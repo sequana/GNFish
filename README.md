@@ -28,12 +28,12 @@ People wishing to contribute to the software, report issues or seek support can 
 
 # Download
 
-Download scripts and examples from git_hub_link
+Download scripts from https://github.com/hectorloma/GNFish
 
 In linux terminal
 
 ```
-git clone git_hub_link
+git clone https://github.com/hectorloma/GNFish
 ```
 
 If git is not installed visit https://github.com/git-guides/install-git  
@@ -42,7 +42,7 @@ which is available for any OS
 Make scripts executable if you want to run it from the very same terminal
 
 ```
-cd mitogenomics
+cd GNFish
 ```
 
 ```
