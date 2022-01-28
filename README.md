@@ -1,7 +1,7 @@
 # GNFish
-Suite of small Python programs following the pipeline detailed in (DOI of article yet to be published) for:
-(1) “fishing” specific gene sequences of interest from genomic data available in NCBI databases
-(2) processing and depuration of retrieved sequences
+Suite of small Python programs following the pipeline detailed in (DOI of article yet to be published) for:\n
+(1) “fishing” specific gene sequences of interest from genomic data available in NCBI databases\n
+(2) processing and depuration of retrieved sequences\n
 (3) production of a multiple sequence alignment
 (4) selection of best-fit model of evolution
 (5) solid reconstruction of a phylogenetic tree.
