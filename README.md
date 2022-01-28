@@ -60,10 +60,10 @@ pip install biopython
 ### DESCRIPTION:<br />
 
 Program for dowloading genomes from NCBI Databases through Entrez. Requires internet conection.<br />
-It needs your e-mail and a file with your queries.
-Queries are usallly taxa names (see query_genomes examples files at ./Examples)
+It needs your e-mail and a file with your queries.<br />
+Queries are usallly taxa names (see query_genomes examples files at ./Examples)<br />
 By default it will download genomic data, but you can also add protein or RNA, using --protein or --rna respectively.<br />
-Retmax set a maximum number of downloaded genomes for query.
+Retmax set a maximum number of downloaded genomes for query.<br />
 It creates a directory named Data and three subdirectories named Genomic, Rna and Protein where it downloads the genomes.<br />
 Genomes file are compressed you must descompress for working with them (see decompress genome file).<br />
 Genome file name will be "Genus_species_assemblyID_datatype.f[n,a]a".
@@ -94,6 +94,7 @@ Examples files are availabe at Example directory.
 
 #### 1.- Plain search
 Query txt with simple searches, just taxa nor filters or field tags. No refine argument.<br />
+See ./Examples/query_genome_3.txt for examples of queries.<br />
 Creates ./Data directory and ./Data/Genomic, ./Data/Rna and ./Data/Protein subdirectories.<br />
 Nor filters or field tags applied. Not curated and redundant genomes (one genom for more than one species is used).<br />
 Use this when you do not care very much about filtering.<br />
@@ -131,7 +132,9 @@ Own filters or field tags.
 More info about filters and field tags at x and reading y.
 
 #### 3.- Refine applied to each query
-As each contains is own filters or field tags this will be applied exclusively. See ./Example/query_filters.txt for a scheme.<br />
+You must add a the field tags or filters after your query.<br />
+See ./Examples/query_genome_3.txt for examples of queries.<br />
+As each contains is own filters or field tags this will be applied exclusively.<br />
 Just protein example. For rna, genomic, exclusive or retmax argument see 1 above and them to this command line.<br />
 ```
 ./Code/get_genomes.py hlorente@ucm.es Example/query_filters.txt --protein
@@ -142,13 +145,13 @@ Just protein example. For rna, genomic, exclusive or retmax argument see 1 above
 ### DESCRIPTION:<br />
 
 Program for dowloading protein or nucleotide from NCBI Databases through Entrez. Requires internet conection.<br />
-It needs your e-mail and a file with your queries.
-Queries must follow "Gene name (filters). If no filters type () after the gene name.
+It needs your e-mail and a file with your queries.<br />
+Queries must follow "Gene name (filters). If no filters type () after the gene name.<br />
 By default it will download protein data, but you can change using --nucleotide parameter.<br />
-Retmax set a maximum number of downloaded genomes for query.
+Retmax set a maximum number of downloaded genomes for query.<br />
 Curated refine the search or protein, just those entries which include the name of the protein in Protein Feature.
-It creates a directory named Data and three subdirectories named Genomic, Rna and Protein where it downloads the genomes.<br />
-Genomes file are compressed you must descompress for working with them (see decompress genome file).<br />
+Stores sequences at ./Data/Query_seqs.<br />
+Output file will be named "genename_query_seqs.fas.<br />
 
 Type on terminal get_genomes.py -h for further information.<br />
 
@@ -162,44 +165,38 @@ Type on terminal get_genomes.py -h for further information.<br />
 **--query** -> file with the queries. Usually simple taxa names (species, group). Field tags or filters can be added to each query. See examples below or look at Examples directory for examples of query files<br />
 
 Optional parameters:<br />
-**--genomic** -> downloads whole genomic data<br />
-**--rna** -> downloads protein annotation data<br />
-**--protein** -> downloads protein annotation data<br />
-**--exclusive** -> downloads just protein or rna annotation data if available. No genomic backup<br />
+**--nucleotide** -> for nucleotide downloading<br />
+**--curated** -> downloads just protein or rna annotation data if available. No genomic backup<br />
 **--retmax** -> number of NCBI records reported for every query. Default value equal to 200<br />
-**--refine** -> adds filter or field information to all queries. Constant value AND (latest[filter] AND "representative genome"[filter] AND all[filter] NOT anomalous[filter])<br />
+**--refine** -> adds filter or field tags to the query. Constant value refseq[filter]. Follow constant value structure for your custom filters, begin with "AND"<br />
 
 ### EXAMPLES:
 
 Examples files are availabe at Example directory.
 
-#### 1.- Plain search
-Query txt with simple searches, just taxa nor filters or field tags. No refine argument.<br />
-Creates ./Data directory and ./Data/Genomic, ./Data/Rna and ./Data/Protein subdirectories.<br />
-Nor filters or field tags applied. Not curated and redundant genomes (one genom for more than one species is used).<br />
-Use this when you do not care very much about filtering.<br />
+#### 1.- Simple search
+Query txt with simple searches, just gene name and filters equal to ().<br />
+Creates ./Data/Query_seqs directory.<br />
+Peforms well for protein for nucleotide it is better to see 2.
 
-Genomic donwload
+Protein download
 ```
-./Code/get_genomes.py hlorente@ucm.es Example/query.txt
+./Code/get_query_seqs_.py hlorente@ucm.es Example/query_seqs.txt
 ```
-Protein donwload, look for genomic data as backup (For transcrits use --rna)
+Protein download, restricting maximum number to 50
 ```
-./Code/get_genomes.py hlorente@ucm.es Example/query.txt --protein
+./Code/get_query_seqs_.py hlorente@ucm.es Example/query_seqs.txt --retmax 50
 ```
-Exclusive protein download. No backup. (For transcrits use --rna)
+Protein download, restricting maximum number to 50 and curating
 ```
-./Code/get_genomes.py hlorente@ucm.es Example/query.txt --protein --exlusive
+./Code/get_query_seqs_.py hlorente@ucm.es Example/query_seqs.txt --retmax 50 --curated
 ```
-Protein and Rna downloading. Genomic search as backup
+Nucleotide downloading, restricting maximum number to 50. Better see 2.
 ```
-./Code/get_genomes.py hlorente@ucm.es Example/query.txt --protein --rna
+./Code/get_query_seqs_.py hlorente@ucm.es Example/query_seqs.txt --retmax 50 --nucleotide
 ```
-Rna donwload changing number of records downloaded. Will donwload until 1000 genomes if available. By default 200 are donwloaded.
-```
-./Code/get_genomes.py hlorente@ucm.es Example/query.txt --rna --retmax 1000
-```
-#### 2.- Refine search using --refine argument. **Recomended**
+
+#### 2.- Refine search using --refine argument.
 Default. Applies Representative (just one genome for species), Latest, Not Anomalous.<br />
 Just protein example. For rna, genomic, exclusive or retmax argument see 1 above and them to this command line.<br />
 ```
