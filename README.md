@@ -63,6 +63,7 @@ Program for dowloading genomes from NCBI Databases through Entrez. Requires inte
 It needs your e-mail and a file with your queries. By default it will download genomic data, but you can also add protein or RNA, using --protein or --rna respectively.<br />
 It creates a directory named Data and three subdirectories named Genomic, Rna and Protein where it downloads the genomes.<br />
 Genomes file are compressed you must descompress for working with them (see decompress genome file).<br />
+Genome file name will be "Genus_species_assemblyID_datatype.f[n,a]a".
 
 Type on terminal get_genomes.py -h for further information.<br />
 
@@ -145,7 +146,7 @@ Type on terminal get_genomes.py -h for further information.<br />
 
 ### USAGE:<br />
 
-**get_genomes.py 'e-mail' 'query.txt' -c convertfile_Y/N > assembly.fas**<br />
+**get_protein_query_.py 'e-mail' 'query.txt' -c convertfile_Y/N > assembly.fas**<br />
 
 ### PARAMETERS:<br />
 
