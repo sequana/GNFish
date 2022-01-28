@@ -5,9 +5,9 @@ Suite of small Python programs following the pipeline detailed in (DOI of articl
 (3) production of a multiple sequence alignment<br />
 (4) selection of best-fit model of evolution<br />
 (5) solid reconstruction of a phylogenetic tree.<br />
-<br />
+
 There are 12 scripts:<br />
-<br />
+
 align_sequences.py -> Align sequences using MAFFT software<br />
 blast.py -> Perfoms BLAST searches against the download genomes<br />
 class_list_files.py -> Class for accessing directories. Not need to be run, but the other scripts need it.<br />
@@ -20,11 +20,11 @@ get_unique_hits.py -> Gets unique hits from Blast output files based on genomes 
 iqtree.py -> Runs IQ-Tree program for phylogentic inference<br />
 translate_seq.py -> Translate nucleotide sequences to protein.<br />
 trimal.py -> Runs trimAl program for trimming alignments.<br />
-<br />
+
 **This software is released under the license GNU GPLv3.**<br />
-<br />
+
 **This software is provided as is without warranty of any kind.**<br />
-<br />
+
 People wishing to contribute to the software, report issues or seek support can contact Hector Lorente Martinez at hlorente@ucm.es<br />
 
 
@@ -63,15 +63,15 @@ Program for dowloading genomes from NCBI Databases through Entrez. Requires inte
 It needs your e-mail and a file with your queries. By default it will download genomic data, but you can also add protein or RNA, using --protein or --rna respectively.<br />
 It creates a directory named Data and three subdirectories named Genomic, Rna and Protein where it downloads the genomes.<br />
 Genomes file are compressed you must descompress for working with them (see decompress genome file).<br />
-<br />
+
 Type on terminal get_genomes.py -h for further information.<br />
-<br />
-###USAGE:<br />
-<br />
+
+### USAGE:<br />
+
 **get_genomes.py 'e-mail' 'query.txt' -c convertfile_Y/N > assembly.fas**<br />
-<br />
+
 ### PARAMETERS:<br />
-<br />
+
 **--email** -> mandatory e-mail for NCBI searches<br />
 **--query**'-> file with the queries. Usually simple taxa names (species, group). Field tags or filters can be added to each query. See examples below or look at Examples directory for examples of query files.<br />
 Optional parameters<br />
