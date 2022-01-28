@@ -92,7 +92,8 @@ Optional parameters<br />
 
 Examples files are availabe at Example directory.
 
-1.- Plain search. Query txt with simple searches, just taxa nor filters or field tags. No refine argument.
+#### 1.- Plain search
+Query txt with simple searches, just taxa nor filters or field tags. No refine argument.
 Creates ./Data directory and ./Data/Genomic, ./Data/Rna and ./Data/Protein subdirectories. 
 Nor filters or field tags applied. Not curated and redundant genomes (one genom for more than one species is used)
 Use this when you do not care very much about filtering.
@@ -117,7 +118,7 @@ Rna donwload changing number of records downloaded. Will donwload until 1000 gen
 ```
 ./Code/get_genomes.py -hlorente@ucm.es Example/query.txt --rna --retmax 1000
 ```
-2.- Refine search using --refine argument. **Recomended**
+#### 2.- Refine search using --refine argument. **Recomended**
 Default. Applies Representative (just one genome for species), Latest, Not Anomalous.
 Just protein example. For rna, genomic, exclusive or retmax argument see 1 above and them to this command line.
 ```
@@ -129,7 +130,7 @@ Own filters or field tags.
 ```
 More info about filters and field tags at x and reading y.
 
-3.- Refine applied to each query.
+#### 3.- Refine applied to each query
 As each contains is own filters or field tags this will be applied exclusively. See ./Example/query_filters.txt for a scheme.
 Just protein example. For rna, genomic, exclusive or retmax argument see 1 above and them to this command line.
 ```
