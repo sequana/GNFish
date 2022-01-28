@@ -260,7 +260,7 @@ Type on terminal decompress_genomes.py -h for further information.<br />
 ### PARAMETERS:<br />
 
 Optional parameters:<br />
-**--directory** -> path to folders enclosing files<br />
+**--directory** -> sets path to custom folder<br />
 **--genomic** -> looks at ./Data/Genomic<br />
 **--rna** -> looks at ./Data/Rna<br />
 **--protein** -> looks at ./Data/Protein<br />
@@ -285,7 +285,7 @@ Type on terminal blast.py -h for further information.<br />
 **query_type** -> data type of query sequences. prot or nucl <br />
 
 Optional parameters:<br />
-**--directory** -> path to folders enclosing genomes<br />
+**--directory** -> sets path to custom folder<br />
 **--genomic** -> looks at ./Data/Genomic<br />
 **--rna** -> looks at ./Data/Rna<br />
 **--protein** -> looks at ./Data/Protein<br />
@@ -299,7 +299,6 @@ Optional parameters:<br />
 Examples files are availabe at Example directory.
 
 #### 1.- Query and database (genome) are proteins
-
 Protein directory
 ```
 ./Code/blast.py 'path_to_bin_directory' ./Example/protein_query.fas 'prot' --protein
@@ -310,7 +309,7 @@ Custom directory
 ```
 
 #### 2.- Query and database (genome) are nucleotides
-Nucleotide directory
+Rna directory
 ```
 ./Code/blast.py 'path_to_bin_directory' ./Example/nucleotide_query.fas 'nucl' --rna
 ```
@@ -320,7 +319,7 @@ Custom directory
 ```
 
 #### 3.- Query is protein and database (genome) is nucleotide
-Nucleotide directory
+Rna directory
 ```
 ./Code/blast.py 'path_to_bin_directory' ./Example/protein_query.fas 'prot' --rna
 ```
@@ -357,7 +356,7 @@ Type on terminal get_unique_hits.py -h for further information.<br />
 ### PARAMETERS:<br />
 
 Optional parameters:<br />
-**--directory** -> path to folders enclosing genomes<br />
+**--directory** -> sets path to custom folder<br />
 **--genomic** -> looks at ./Data/Genomic<br />
 **--rna** -> looks at ./Data/Rna<br />
 **--protein** -> looks at ./Data/Protein<br />
@@ -369,7 +368,6 @@ Optional parameters:<br />
 Examples files are availabe at Example directory.
 
 #### 1.- Default
-
 Protein directory. Output will be stored at ./Data/Protein/Species_directory
 ```
 ./Code/get_unique_hits.py --protein
@@ -397,16 +395,16 @@ Type on terminal get_unique_hits.py -h for further information.<br />
 
 ### USAGE:<br />
 
-**get_unique_hits.py  --data_type or --directory 'path' **<br />
+**get_RAW_sequences.py  --data_type or --directory 'path' **<br />
 
 ### PARAMETERS:<br />
 
 Optional parameters:<br />
-**--directory** -> path to folders enclosing genomes<br />
+**--directory** -> sets path to custom folder<br />
 **--genomic** -> looks at ./Data/Genomic<br />
 **--rna** -> looks at ./Data/Rna<br />
 **--protein** -> looks at ./Data/Protein<br />
-**--blast_pattern** -> custom pattern to find Blast output files. Default ".tsv"<br />
+**--blast_pattern** -> custom pattern to find BLAST output files. Default ".tsv"<br />
 **--genome_pattern** -> pattern to find genome files. Default ".f[a,n]a"<br />
 **--in_len** -> Number of sites extracted upstream and downstream from the blast hit. Default 10000. A whole sequence of at least 20000 sites if exists<br />
 **--query_seqs** -> Use it when you want to attach some query sequences according to BLAST results for future alignments<br />
@@ -419,14 +417,13 @@ Optional parameters:<br />
 Examples files are availabe at Example directory.
 
 #### 1.- Default
-
 Protein directory. Output will be stored at ./Data/Protein/Species_directory
 ```
 ./Code/get_RAW_sequences.py --protein
 ```
 Genomic directory, sequences of 20,000 positions if possible. Output will be stored at ./Data/Genomic/Species_directory
 ```
-./Code/get_RAW_sequences.py --genomic --in_len
+./Code/get_RAW_sequences.py --genomic
 ```
 Custom directory. Output will be stored at custom directory (where the file is located)
 ```
@@ -447,8 +444,205 @@ Program will look for 'unique.txt' and for '.fas'.
 ```
 ./Code/get_RAW_sequences.py --genomic --in_len --blast_pattern 'unique.txt' --genome_pattern '.fas' --query_seqs ./Example/query_seqs.txt --query_seqs_num 20 --email hlorente@ucm.es
 ```
-#### 3.- Changing genome and BLAST pattern
+#### 4.- Changing length of genomic extracted sequence
 Genomic directory, sequences of 30,000 positions if possible. Output will be stored at ./Data/Genomic/Species_directory
 ```
 ./Code/get_RAW_sequences.py --genomic --in_len 15000
+```
+## align_sequences.py <br />
+
+### DESCRIPTION:<br />
+
+Aligns files enclosed at Data folder or your custom file.<br />
+You must have used --query_seqs argument in get_RAW_sequences.py or have manually added some sequences to raw files.<br />
+See https://mafft.cbrc.jp/ for information about algorithms.<br />
+Type on terminal get_unique_hits.py -h for further information.<br />
+
+### USAGE:<br />
+
+**align_sequences.py  --data_type or --directory 'path' **<br />
+
+### PARAMETERS:<br />
+
+Optional parameters:<br />
+**--directory** -> sets path to custom folder<br />
+**--genomic** -> looks at ./Data/Genomic<br />
+**--rna** -> looks at ./Data/Rna<br />
+**--protein** -> looks at ./Data/Protein<br />
+**--pattern** -> sets custom pattern to find files for alignment. Default 'RAW.fas'. Backup search RAW.fas<br />
+**--algorithm** -> sets MAFFT algorithm. Default mafft (automatic)<br />
+
+
+### EXAMPLES:
+
+Examples files are availabe at Example directory.
+
+#### 1.- Automatic
+Genomic directory. Output will be stored at ./Data/Genomic/Species_directory
+```
+./Code/align_sequences.py --genomic
+```
+Custom directory. Output will be stored at custom directory (where the file is located)
+```
+./Code/align_sequences.py --directory 'path_to_custom_directory'
+```
+
+#### 2.- Custom directory, e-insi algorithma and custom pattern
+Custom directory. Output will be stored at custom directory (where the file is located)
+```
+./Code/align_sequences.py --directory 'path_to_custom_directory' --algorithm einsi --pattern 'RAW_mod.fas'
+```
+
+## translate_sequences.py  <br />
+
+### DESCRIPTION:<br />
+
+Translates files.<br />
+Open code file of the program for checking for different genetic codes.<br />
+
+### USAGE:<br />
+
+**translate_sequences.py  --data_type or --directory 'path' **<br />
+
+### PARAMETERS:<br />
+
+Optional parameters:<br />
+**--directory** -> sets path to custom folder<br />
+**--genomic** -> looks at ./Data/Genomic<br />
+**--rna** -> looks at ./Data/Rna<br />
+**--pattern** -> custom pattern to find files for translation. Defaul '_final.fas' and 'RAW.fas' as backup<br />
+**--genetic_code** -> Default 1 -Standard. Look at code file for more genetics codes<br />
+**--out_exten** -> extension of the output file. Default '_transtaled.fas'.<br />
+
+### EXAMPLES:
+
+#### 1.- Default
+Rna directory. Output will be stored at ./Data/Rna/Species_directory
+```
+./Code/translate_sequences.py --rna
+```
+Custom directory. Output will be stored at custom directory (where the file is located)
+```
+./Code/translate_sequences.py --directory 'path_to_custom_directory'
+```
+
+#### 2.- Changing genetic code
+Custom directory. Output will be stored at custom directory (where the file is located)
+```
+./Code/get_RAW_sequences.py --directory 'path_to_custom_directory' --genetic_code 4
+```
+
+## get_combined_seqs.py  <br />
+
+### DESCRIPTION:<br />
+
+Combines FASTA files in just one matrix.<br />
+You can combine genomic, RNA and protein data. But be careful with duplications. Besides genomic and RNA should have been translated (see above) in the correct reading framework before translation (see above).<br />
+Note that the program concatenate sequences to same file if you do not change file_name argument.<br />
+After the pipeline (see **article**) you may have:<br />
+1.-Untouched sequences. Typically protein or RNA sequence (valid for future nucleotide matrix if you do not care about UTRs; not valid for future protein matrix, because of lost of reading framework). Extension 'RAW.fas'.<br />
+2.- Aligned and trimmed (mismatched positions) sequences. Mandatory for genomic sequences and in some cases for RNA sequences (if you are going to uses for protein matrix after translation, but in this case they will follow point 3). Extension '_final.fas'. Add the extension to your file after visualizing the alingment even when you do not trimmed any position of the alingment.<br />
+3.- Translated sequences. Mandatory for genomic sequences and RNA sequences<br />
+4.- Raw translated sequences. If the RNA dataset you are working with is just the coding sequence and you do not need to trimm it. Extension '_RAW_translated.fas<br />
+
+### USAGE:<br />
+
+**get_combined_seqs.py  --data_type or --directory 'path' **<br />
+
+### PARAMETERS:<br />
+**output_name** -> name for the file of the combined matrix<br />
+**output_path** -> path were to store the combined matrix<br />
+
+Optional parameters:<br />
+**--directory** -> sets path to custom folder<br />
+**--genomic** -> looks at ./Data/Genomic<br />
+**--rna** -> looks at ./Data/Rna<br />
+**--protein** -> looks at ./Data/Protein<br />
+**--pattern** -> custom pattern to find files for translation. Defaul '_translated.fas' and 'RAW.fas' as backup'<br />
+**--out_exten** -> extension of the output file. Default "_all_combined.fas"<br />
+
+### EXAMPLES:
+
+#### 1.- Default
+Protein and Genomic directory. Output will be stored at ./Data/Rna/Species_directory
+```
+./Code/get_combined_seqs.py --protein --genomic
+```
+Custom directory. Output will be stored at custom directory (where the file is located)
+```
+./Code/get_combined_seqs.py --directory 'path_to_custom_directory'
+```
+
+#### 2.- Changing pattern
+Protein and Genomic directory. Output will be stored at ./Data/Rna/Species_directory
+```
+./Code/get_combined_seqs.py --protein --genomic --pattern 'modified.fas'
+```
+
+## alignment_trimming.py  <br />
+
+### DESCRIPTION:<br />
+
+Trims alignment.<br />
+See http://trimal.cgenomics.org/use_of_the_command_line_trimal_v1.2 for more information about trimAL and running algorithms.<br />
+
+### USAGE:<br />
+
+**alignment_trimming.py trimal_path 'path'  input_file 'path' output_file 'path' **<br />
+
+### PARAMETERS:<br />
+**trimal_path** -> path to trimAl directory<br />
+**input_file** -> alignment (FASTA file with prot or nucl aligned seqs)<br />
+**output_file** -> output file name<br />
+
+Optional parameters:<br />
+**--trimal_command** -> command to run trimal options. Default -gt 0.1<br />
+
+### EXAMPLES:
+
+Examples files are availabe at Example directory.
+
+#### 1.- Default
+Remove all positions in the alignment with gaps in 90% 
+```
+./Code/alignment_trimming.py trimal_path 'path_to_trimAl_source_directory' --input_file 'path_to_alignment' --output_file 'path_to_ouput_file'
+```
+
+#### 2.- Changing algorithm
+Remove all positions in the alignment with gaps in 50% 
+```
+./Code/alignment_trimming.py trimal_path 'path_to_source_directory' --input_file 'path_to_alignment' --output_file 'path_to_ouput_file' --trimal_command -gt 0.5
+```
+
+## phylogenetic_inference.py  <br />
+
+### DESCRIPTION:<br />
+
+Phylogenetic analysis using IQ-TREE.<br />
+See http://www.iqtree.org/doc/ for more information about IQ-TREE and running algorithms.<br />
+
+### USAGE:<br />
+
+**phylogenetic_inference.py  --data_type or --directory 'path' **<br />
+
+### PARAMETERS:<br />
+**iqtree_path** -> path to IQ-TREE bin folder<br />
+**input_file** -> alignment (FASTA file with prot or nucl aligned seqs)<br />
+
+Optional parameters:<br />
+**--trimal_command** -> command to run IQ-Tree, without output declaration, see next parameter. Default TEST, ULTRAFAST BOOSTRAP 1000, ALRT 1000<br />
+**--output_suffix** -> suffixes added to input file. Recommended, model and type of support. Default _TEST_UFBS_alrt<br />
+
+### EXAMPLES:
+
+#### 1.- Default
+Phylogenetic inference running TEST for calculating model of evolutoon, 1000 replicates of Ultrafast Boostrap and 1000 replicates of alrt as support.
+```
+./Code/alignment_trimming.py iqtree_path 'path_to_IQTREE_bin_directory' --input_file 'path_to_alignment'
+```
+
+#### 2.- Changing algorithm
+Phylogenetic inference running LG as model of evolution, 1000 replicates of Boostrap and 1000 replicates of alrt as support.
+```
+./Code/alignment_trimming.py iqtree_path 'path_to_IQTREE_bin_directory' --input_file 'path_to_alignment' --trimal_command '-m LG -b 1000 -alrt 1000
 ```
