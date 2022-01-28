@@ -122,7 +122,7 @@ Protein and Rna downloading. Genomic search as backup
 Rna donwload changing number of records downloaded. Will donwload until 1000 genomes if available. By default 200 are donwloaded.
 ```
 ./Code/get_genomes.py -hlorente@ucm.es Example/query.txt --rna --retmax 1000
-``
+```
 2.- Refine search using --refine argument. **Recomended**
 Default. Applies Representative (just one genome for species), Latest, Not Anomalous.
 Just protein example. For rna, genomic, exclusive or retmax argument see 1 above and them to this command line.
