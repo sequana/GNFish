@@ -74,29 +74,24 @@ Type on terminal get_genomes.py -h for further information.<br />
 
 **--email** -> mandatory e-mail for NCBI searches<br />
 **--query**-> file with the queries. Usually simple taxa names (species, group). Field tags or filters can be added to each query. See examples below or look at Examples directory for examples of query files.<br />
+
 Optional parameters:<br />
-**--genomic** -> downloads whole genomic data<br />
-**--rna** -> downloads protein annotation data<br />
-**--protein** ->download protein annotation data', action='store_true')<br />
-**--exclusive', help='download just protein or rna annotation data if available.', action='store_true')
-**--retmax', help='number of NCBI records reported for every query. Default value equal to 200',nargs='?', const=200, type=int, default=200)
-**--refine', help='add
-
-**-m MITOFILE --mitofile** -> Input file with mitogenome sequence in fasta format, as submitted to MITOS2
-
-**-g GENESFILE, --genesfile** -> Input file with MITOS2 output with individual genes in fasta format
-
-**-c CONVERTFILE, --convertfile** -> Gene names (fasta headers) from MITOS2 will be simplified and made compliant with aln2tbl. Yes=Y No=N
+**--genomic** -> downloads whole genomic data
+**--rna** -> downloads protein annotation data
+**--protein** ->downloads protein annotation data
+**--exclusive** -> downloads just protein or rna annotation data if available. No genomic backup.
+**--retmax** -> number of NCBI records reported for every query. Default value equal to 200.
+**--refine** -> adds filter or field information to all queries. Constant value AND (latest[filter] AND "representative genome"[filter] AND all[filter] NOT anomalous[filter])
 
 ### EXAMPLES:
 
 Examples files are availabe at Example directory.
 
 #### 1.- Plain search
-Query txt with simple searches, just taxa nor filters or field tags. No refine argument.
-Creates ./Data directory and ./Data/Genomic, ./Data/Rna and ./Data/Protein subdirectories. 
-Nor filters or field tags applied. Not curated and redundant genomes (one genom for more than one species is used)
-Use this when you do not care very much about filtering.
+Query txt with simple searches, just taxa nor filters or field tags. No refine argument.<br />
+Creates ./Data directory and ./Data/Genomic, ./Data/Rna and ./Data/Protein subdirectories.<br />
+Nor filters or field tags applied. Not curated and redundant genomes (one genom for more than one species is used).<br />
+Use this when you do not care very much about filtering.<br />
 
 Genomic donwload
 ```
