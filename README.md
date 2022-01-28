@@ -73,19 +73,20 @@ Type on terminal get_genomes.py -h for further information.
 **USAGE:**
 
 
-**get_genomes.py 'e-mail' './Example/query.txt' -c convertfile_Y/N > assembly.fas**
+**get_genomes.py 'e-mail' 'query.txt' -c convertfile_Y/N > assembly.fas**
 
 
 **PARAMETERS:**
 
 **--email** -> mandatory e-mail for NCBI searches
-	parser.add_argument('query', help='file with the queries', type=argparse.FileType('r'))
-	parser.add_argument('--genome', help='downloads whole genomic data', action='store_true')
-	parser.add_argument('--rna', help='download protein annotation data', action='store_true')
-	parser.add_argument('--protein', help='download protein annotation data', action='store_true')
-	parser.add_argument('--exclusive', help='download just protein or rna annotation data if available.', action='store_true')
-	parser.add_argument('--retmax', help='number of NCBI records reported for every query. Default value equal to 200',nargs='?', const=200, type=int, default=200)
-	parser.add_argument('--filters', help='add
+**--query**'-> file with the queries. Usually simple taxa names (species, group). Field tags or filters can be added to each query. See examples below or look at Exampls directory for examples of query files.
+Optional parameters
+**--genomic** downloads whole genomic data
+**--rna', help='download protein annotation data', action='store_true')
+**--protein', help='download protein annotation data', action='store_true')
+**--exclusive', help='download just protein or rna annotation data if available.', action='store_true')
+**--retmax', help='number of NCBI records reported for every query. Default value equal to 200',nargs='?', const=200, type=int, default=200)
+**--refine', help='add
 
 **-m MITOFILE --mitofile** -> Input file with mitogenome sequence in fasta format, as submitted to MITOS2
 
@@ -95,8 +96,48 @@ Type on terminal get_genomes.py -h for further information.
 
 **EXAMPLE:**
 
+Examples files are availabe at Example directory.
 
+1.- Plain search. Query txt with simple searches, just taxa nor filters or field tags. No refine argument.
+Creates ./Data directory and ./Data/Genomic, ./Data/Rna and ./Data/Protein subdirectories. 
+Nor filters or field tags applied. Not curated and redundant genomes (one genom for more than one species is used)
+Use this when you do not care very much about filtering.
 
-./Code/get_genomes.py -hlorente@ucm.es -g ./example/input/Hyalella_solida_genes_mitos2.fas -c Y > ./example/input/Hyalella_solida_assembly.fas
+Genomic donwload
+```
+./Code/get_genomes.py -hlorente@ucm.es Example/query.txt
+```
+Protein donwload, look for genomic data as backup (For transcrits use --rna)
+```
+./Code/get_genomes.py -hlorente@ucm.es Example/query.txt --protein
+```
+Exclusive protein download. No backup. (For transcrits use --rna)
+```
+./Code/get_genomes.py -hlorente@ucm.es Example/query.txt --protein --exlusive
+```
+Protein and Rna downloading. Genomic search as backup
+```
+./Code/get_genomes.py -hlorente@ucm.es Example/query.txt --protein --rna
+```
+Rna donwload changing number of records downloaded. Will donwload until 1000 genomes if available. By default 200 are donwloaded.
+```
+./Code/get_genomes.py -hlorente@ucm.es Example/query.txt --rna --retmax 1000
+``
+2.- Refine search using --refine argument. **Recomended**
+Default. Applies Representative (just one genome for species), Latest, Not Anomalous.
+Just protein example. For rna, genomic, exclusive or retmax argument see 1 above and them to this command line.
+```
+./Code/get_genomes.py -hlorente@ucm.es Example/query.txt --protein --refine
+```
+Own filters or field tags. 
+```
+./Code/get_genomes.py -hlorente@ucm.es Example/query.txt --protein --refine ''
+```
+More info about filters and field tags at x and reading y.
 
-
+3.- Refine applied to each query.
+As each contains is own filters or field tags this will be applied exclusively. See ./Example/query_filters.txt for a scheme.
+Just protein example. For rna, genomic, exclusive or retmax argument see 1 above and them to this command line.
+```
+./Code/get_genomes.py -hlorente@ucm.es Example/query_filters.txt --protein
+```
