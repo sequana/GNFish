@@ -45,8 +45,8 @@ cd GNFish
 ```
 chmod +x *.py
 ```
-<br />
-<br />
+
+
 ## Dependencies<br />
 <br />
 This software uses Biopython module in python 3 (tested version 1.78-2). It can be installed in your system using pip:
