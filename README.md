@@ -32,7 +32,7 @@ People wishing to contribute to the software, report issues or seek support can 
 <br />
 Download scripts from https://github.com/hectorloma/GNFish<br />
 <br />
-In linux terminal<br />
+In linux terminal
 ```
 git clone https://github.com/hectorloma/GNFish
 ```
