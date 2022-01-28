@@ -1,0 +1,2 @@
+aquaporin(AND refseq[filter]))
+hemoglobin(AND plasmid[filter)
