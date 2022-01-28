@@ -1,27 +1,27 @@
 # GNFish
-Suite of small Python programs following the pipeline detailed in (DOI of article yet to be published) for:\n
-(1) “fishing” specific gene sequences of interest from genomic data available in NCBI databases\n
-(2) processing and depuration of retrieved sequences\n
-(3) production of a multiple sequence alignment
-(4) selection of best-fit model of evolution
-(5) solid reconstruction of a phylogenetic tree.
+Suite of small Python programs following the pipeline detailed in (DOI of article yet to be published) for:<br />
+(1) “fishing” specific gene sequences of interest from genomic data available in NCBI databases<br />
+(2) processing and depuration of retrieved sequences<br />
+(3) production of a multiple sequence alignment<br />
+(4) selection of best-fit model of evolution<br />
+(5) solid reconstruction of a phylogenetic tree.<br />
 
-There are 12 scripts:
+There are 12 scripts:<br />
+<br />
+align_sequences.py -> Align sequences using MAFFT software<br />
+blast.py -> Perfoms BLAST searches against the download genomes<br />
+class_list_files.py -> Class for accessing directories. Not need to be run, but the other scripts need it.<br />
+decompress_genomes.py -> Decompress genome files.<br />
+get_combined_seqs.py -> Merge sequences for creating a whole alingment.<br />
+get_genomes.py -> Download genomes from NCBI databases<br />
+get_protein_query_.py -> Download a dataset of protein sequences that act as query for BLAST searches<br />
+get_RAW_sequences.py -> Extracts the sequences mapped after BLAST searches<br />
+get_unique_hits.py -> Gets unique hits from Blast output files based on genomes IDs<br />
+iqtree.py -> Runs IQ-Tree program for phylogentic inference<br />
+translate_seq.py -> Translate nucleotide sequences to protein.<br />
+trimal.py -> Runs trimAl program for trimming alignments.<br />
 
-align_sequences.py -> Align sequences using MAFFT software
-blast.py -> Perfoms BLAST searches against the download genomes
-class_list_files.py -> Class for accessing directories. Not need to be run, but the other scripts need it.
-decompress_genomes.py -> Decompress genome files.
-get_combined_seqs.py -> Merge sequences for creating a whole alingment.
-get_genomes.py -> Download genomes from NCBI databases
-get_protein_query_.py -> Download a dataset of protein sequences that act as query for BLAST searches
-get_RAW_sequences.py -> Extracts the sequences mapped after BLAST searches
-get_unique_hits.py -> Gets unique hits from Blast output files based on genomes IDs
-iqtree.py -> Runs IQ-Tree program for phylogentic inference
-translate_seq.py -> Translate nucleotide sequences to protein.
-trimal.py -> Runs trimAl program for trimming alignments.
-
-**This software is released under the license GNU GPLv3.**
+**This software is released under the license GNU GPLv3.**<br />
 
 **This software is provided as is without warranty of any kind.** 
 
