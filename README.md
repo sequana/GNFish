@@ -32,11 +32,12 @@ People wishing to contribute to the software, report issues or seek support can 
 <br />
 Download scripts from https://github.com/hectorloma/GNFish<br />
 In linux terminal
+
 ```
 git clone https://github.com/hectorloma/GNFish
 ```
-If git is not installed visit https://github.com/git-guides/install-git which is available for any OS
-
+If git is not installed visit https://github.com/git-guides/install-git which is available for any OS<br />
+<br />
 Make scripts executable if you want to run it from the very same terminal
 ```
 cd GNFish
