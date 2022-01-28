@@ -48,17 +48,16 @@ chmod +x *.py
 
 
 ## Dependencies<br />
-
 This software uses Biopython module in python 3 (tested version 1.78-2). It can be installed in your system using pip:
 ```
 pip install biopython 
 ```
-<br />
-<br />
+
+
 ## get_genomes.py<br />
-<br />
+
 ### DESCRIPTION:<br />
-<br />
+
 Program for dowloading genomes from NCBI Databases through Entrez. Requires internet conection.<br />
 It needs your e-mail and a file with your queries. By default it will download genomic data, but you can also add protein or RNA, using --protein or --rna respectively.<br />
 It creates a directory named Data and three subdirectories named Genomic, Rna and Protein where it downloads the genomes.<br />
