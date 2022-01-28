@@ -8,18 +8,18 @@ Suite of small Python programs following the pipeline detailed in (DOI of articl
 
 There are 12 scripts:<br />
 
-align_sequences.py -> Align sequences using MAFFT software<br />
-blast.py -> Perfoms BLAST searches against the download genomes<br />
-class_list_files.py -> Class for accessing directories. Not need to be run, but the other scripts need it.<br />
-decompress_genomes.py -> Decompress genome files.<br />
-get_combined_seqs.py -> Merge sequences for creating a whole alingment.<br />
-get_genomes.py -> Download genomes from NCBI databases<br />
-get_protein_query_.py -> Download a dataset of protein sequences that act as query for BLAST searches<br />
-get_RAW_sequences.py -> Extracts the sequences mapped after BLAST searches<br />
-get_unique_hits.py -> Gets unique hits from Blast output files based on genomes IDs<br />
-iqtree.py -> Runs IQ-Tree program for phylogentic inference<br />
-translate_seq.py -> Translate nucleotide sequences to protein.<br />
-trimal.py -> Runs trimAl program for trimming alignments.<br />
+**align_sequences.py** -> Align sequences using MAFFT software<br />
+**blast.py** -> Perfoms BLAST searches against the download genomes<br />
+**class_list_files.py** -> Class for accessing directories. Not need to be run, but the other scripts need it.<br />
+**decompress_genomes.py** -> Decompress genome files.<br />
+**get_combined_seqs.py** -> Merge sequences for creating a whole alingment.<br />
+**get_genomes.py** -> Download genomes from NCBI databases<br />
+**get_protein_query_.py** -> Download a dataset of protein sequences that act as query for BLAST searches<br />
+**get_RAW_sequences.py** -> Extracts the sequences mapped after BLAST searches<br />
+**get_unique_hits.py** -> Gets unique hits from Blast output files based on genomes IDs<br />
+**iqtree.py** -> Runs IQ-Tree program for phylogentic inference<br />
+**translate_seq.py** -> Translate nucleotide sequences to protein.<br />
+**trimal.py** -> Runs trimAl program for trimming alignments.<br />
 
 **This software is released under the license GNU GPLv3.**<br />
 
@@ -54,6 +54,83 @@ This software uses Biopython module in python 3 (tested version 1.78-2). It can 
 pip install biopython 
 ```
 
+
+## get_genomes.py<br />
+
+### DESCRIPTION:<br />
+
+Program for dowloading genomes from NCBI Databases through Entrez. Requires internet conection.<br />
+It needs your e-mail and a file with your queries. By default it will download genomic data, but you can also add protein or RNA, using --protein or --rna respectively.<br />
+It creates a directory named Data and three subdirectories named Genomic, Rna and Protein where it downloads the genomes.<br />
+Genomes file are compressed you must descompress for working with them (see decompress genome file).<br />
+
+Type on terminal get_genomes.py -h for further information.<br />
+
+### USAGE:<br />
+
+**get_genomes.py 'e-mail' 'query.txt' -c convertfile_Y/N > assembly.fas**<br />
+
+### PARAMETERS:<br />
+
+**--email** -> mandatory e-mail for NCBI searches<br />
+**--query**-> file with the queries. Usually simple taxa names (species, group). Field tags or filters can be added to each query. See examples below or look at Examples directory for examples of query files<br />
+
+Optional parameters:<br />
+**--genomic** -> downloads whole genomic data<br />
+**--rna** -> downloads protein annotation data<br />
+**--protein** ->downloads protein annotation data<br />
+**--exclusive** -> downloads just protein or rna annotation data if available. No genomic backup<br />
+**--retmax** -> number of NCBI records reported for every query. Default value equal to 200<br />
+**--refine** -> adds filter or field information to all queries. Constant value AND (latest[filter] AND "representative genome"[filter] AND all[filter] NOT anomalous[filter])<br />
+
+### EXAMPLES:
+
+Examples files are availabe at Example directory.
+
+#### 1.- Plain search
+Query txt with simple searches, just taxa nor filters or field tags. No refine argument.<br />
+Creates ./Data directory and ./Data/Genomic, ./Data/Rna and ./Data/Protein subdirectories.<br />
+Nor filters or field tags applied. Not curated and redundant genomes (one genom for more than one species is used).<br />
+Use this when you do not care very much about filtering.<br />
+
+Genomic donwload
+```
+./Code/get_genomes.py hlorente@ucm.es Example/query.txt
+```
+Protein donwload, look for genomic data as backup (For transcrits use --rna)
+```
+./Code/get_genomes.py hlorente@ucm.es Example/query.txt --protein
+```
+Exclusive protein download. No backup. (For transcrits use --rna)
+```
+./Code/get_genomes.py hlorente@ucm.es Example/query.txt --protein --exlusive
+```
+Protein and Rna downloading. Genomic search as backup
+```
+./Code/get_genomes.py hlorente@ucm.es Example/query.txt --protein --rna
+```
+Rna donwload changing number of records downloaded. Will donwload until 1000 genomes if available. By default 200 are donwloaded.
+```
+./Code/get_genomes.py hlorente@ucm.es Example/query.txt --rna --retmax 1000
+```
+#### 2.- Refine search using --refine argument. **Recomended**
+Default. Applies Representative (just one genome for species), Latest, Not Anomalous.<br />
+Just protein example. For rna, genomic, exclusive or retmax argument see 1 above and them to this command line.<br />
+```
+./Code/get_genomes.py hlorente@ucm.es Example/query.txt --protein --refine
+```
+Own filters or field tags. 
+```
+./Code/get_genomes.py hlorente@ucm.es Example/query.txt --protein --refine ''
+```
+More info about filters and field tags at x and reading y.
+
+#### 3.- Refine applied to each query
+As each contains is own filters or field tags this will be applied exclusively. See ./Example/query_filters.txt for a scheme.<br />
+Just protein example. For rna, genomic, exclusive or retmax argument see 1 above and them to this command line.<br />
+```
+./Code/get_genomes.py hlorente@ucm.es Example/query_filters.txt --protein
+```
 
 ## get_genomes.py<br />
 
