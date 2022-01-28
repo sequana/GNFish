@@ -94,40 +94,40 @@ Examples files are availabe at Example directory.
 
 #### 1.- Simple search
 Query txt with simple searches, just taxa nor filters or field tags. No refine argument.<br />
-See ./Example/query_genome.txt for examples of queries.<br />
+See ./Example/query_genome_1.txt for examples of queries.<br />
 Creates ./Data directory and ./Data/Genomic, ./Data/Rna and ./Data/Protein subdirectories.<br />
 Nor filters or field tags applied. Not curated and redundant genomes (one genom for more than one species is used).<br />
 Use this when you do not care very much about filtering.<br />
 
 Genomic
 ```
-./Code/get_genomes.py hlorente@ucm.es Example/query_genome.txt
+./Code/get_genomes.py hlorente@ucm.es Example/query_genome_1.txt
 ```
 Protein. Look for genomic data as backup (For transcrits use --rna)
 ```
-./Code/get_genomes.py hlorente@ucm.es Example/query_genome.txt --protein
+./Code/get_genomes.py hlorente@ucm.es Example/query_genome_1.txt --protein
 ```
 Exclusive protein. No backup. (For transcrits use --rna)
 ```
-./Code/get_genomes.py hlorente@ucm.es Example/query_genome.txt --protein --exlusive
+./Code/get_genomes.py hlorente@ucm.es Example/query_genome_1.txt --protein --exlusive
 ```
 Protein and Rna. Genomic search as backup
 ```
-./Code/get_genomes.py hlorente@ucm.es Example/query_genome.txt --protein --rna
+./Code/get_genomes.py hlorente@ucm.es Example/query_genome_1.txt --protein --rna
 ```
 Rna donwload changing number of records downloaded. Will donwload until 1000 genomes if available. By default 200 are donwloaded.
 ```
-./Code/get_genomes.py hlorente@ucm.es Example/query_genome.txt --rna --retmax 1000
+./Code/get_genomes.py hlorente@ucm.es Example/query_genome_1.txt --rna --retmax 1000
 ```
 #### 2.- Refine search using --refine argument. **Recomended**
 Default. Applies Representative (just one genome for species), Latest, Not Anomalous.<br />
 Just protein example. For rna, genomic, exclusive or retmax argument see 1 above and them to this command line.<br />
 ```
-./Code/get_genomes.py hlorente@ucm.es Example/query_genome.txt --protein --refine
+./Code/get_genomes.py hlorente@ucm.es Example/query_genome_1.txt --protein --refine
 ```
-Own filters or field tags. Just genomes annotated at chromosome level
+Own filters or field tags. Just genomes annotated at chromosome level (Example)
 ```
-./Code/get_genomes.py hlorente@ucm.es Example/query_genome.txt --protein --refine 'AND "chromosome level"[filter]'
+./Code/get_genomes.py hlorente@ucm.es Example/query_genome_1.txt --protein --refine 'AND "chromosome level"[filter]'
 ```
 More info about filters and field tags at https://www.ncbi.nlm.nih.gov/assembly/help/ and reading https://www.ncbi.nlm.nih.gov/books/NBK3837/ - Entre-zHelp.Entrez_Searching_Options.<br />
 
@@ -135,20 +135,23 @@ More info about filters and field tags at https://www.ncbi.nlm.nih.gov/assembly/
 You must add a the field tags or filters after your query.<br />
 See ./Example/query_genome_2.txt for examples of queries.<br />
 As each contains is own filters or field tags this will be applied exclusively.<br />
-For gobioidei it will download just genomes annotated at chromosome level.
-For _Homo sapiens_ all the 
+For gobioidei it will download just genomes annotated at chromosome level.<br />
+For _Homo sapiens_ all the available genomes will be downloaded.<br />
 Just protein example. For rna, genomic, exclusive or retmax argument see 1 above and them to this command line.<br />
 ```
 ./Code/get_genomes.py hlorente@ucm.es Example/query_genome_2.txt --protein
 ```
 
 #### 4.- Refine to each query and general refine
+Default. Applies Representative (just one genome for species), Latest, Not Anomalous.<br />
 You must add a the field tags or filters after your query.<br />
 See ./Example/query_genome_2.txt for examples of queries.<br />
 As each contains is own filters or field tags this will be applied exclusively.<br />
+For gobioidei it will download just genomes annotated at chromosome level.<br />
+For _Homo sapiens_ just the representative one.<br />
 Just protein example. For rna, genomic, exclusive or retmax argument see 1 above and them to this command line.<br />
 ```
-./Code/get_genomes.py hlorente@ucm.es Example/query_genome_2.txt --protein --refine 'AND "chromosome level"[filter]'
+./Code/get_genomes.py hlorente@ucm.es Example/query_genome_2.txt --protein --refine
 ```
 ## get_query_seqs.py<br />
 
@@ -187,60 +190,56 @@ Examples files are availabe at Example directory.
 #### 1.- Simple search
 Query txt with simple searches, just gene name and filters equal to ().<br />
 Creates ./Data/Query_seqs directory.<br />
-Peforms well for protein for nucleotide it is better to see 2.
+Peforms well for protein, for nucleotide it is better to see 2.
 
 Protein
 ```
-./Code/get_query_seqs.py hlorente@ucm.es Example/query_seqs.txt
+./Code/get_query_seqs.py hlorente@ucm.es Example/query_seqs_1.txt
 ```
-Protei. Downloading restricting maximum number to 50
+Protein. Downloading restricting maximum number to 50
 ```
-./Code/get_query_seqs.py hlorente@ucm.es Example/query_seqs.txt --retmax 50
+./Code/get_query_seqs.py hlorente@ucm.es Example/query_seqs_1.txt --retmax 50
 ```
-Protei. Downloading restricting maximum number to 50 and curating
+Protein. Downloading restricting maximum number to 50 and curating
 ```
-./Code/get_query_seqs.py hlorente@ucm.es Example/query_seqs.txt --retmax 50 --curated
+./Code/get_query_seqs.py hlorente@ucm.es Example/query_seqs_1.txt --retmax 50 --curated
 ```
 Nucleotide. Downloading restricting maximum number to 50. Better see 2.
 ```
-./Code/get_query_seqs.py hlorente@ucm.es Example/query_seqs.txt --retmax 50 --nucleotide
+./Code/get_query_seqs.py hlorente@ucm.es Example/query_seqs_1.txt --retmax 50 --nucleotide
 ```
 
 #### 2.- Refine search using --refine argument. **Recommended**
 Default. Applies refseq[filter].<br />
 Protein download, restricting maximum number to 50, curating, refine default just sequences from RefSeq.<br />
 ```
-./Code/get_query_seqs.py hlorente@ucm.es Example/query_seqs.txt --retmax 50 --curated --refine
-```
-Protein. Protein. Downloading restricting maximum number to 50, curating and just sequences from RefSeq (refine argument).
-```
-./Code/get_query_seqs.py hlorente@ucm.es Example/query_seqs.txt --retmax 50 --curated --refine 
+./Code/get_query_seqs.py hlorente@ucm.es Example/query_seqs_1.txt --retmax 50 --curated --refine
 ```
 Nucleotide **recommended** use. Dowloading restricting maximum number to 50 and just transcripts (refine argument).
 ```
-./Code/get_query_seqs.py hlorente@ucm.es Example/query_seqs.txt --retmax 50 --curated --refine 'biomol_mrna[PROP]'
+./Code/get_query_seqs.py hlorente@ucm.es Example/query_seqs_1.txt --retmax 50 --curated --refine 'biomol_mrna[PROP]'
 ```
 
 #### 3.- Refine applied to each query
 You must add a the field tags or filters after your query.<br />
 As each query contains is own filters or field tags these will be applied exclusively to every query. See ./Example/query_seqs_2.txt and quer_seqs_3.txt for a scheme.<br />
-Protein
+Protein. For aquaporin just vertebrates sequences. For hemoglobin just sequences between 100 and 200 positions.
+```
+./Code/get_query_seqs.py hlorente@ucm.es Example/query_seqs_2.txt
+```
+Nucleotide. For aquaporin sequences just download sequences from RefSeq. For hemoglobin just from Plasmids.
 ```
 ./Code/get_query_seqs.py hlorente@ucm.es Example/query_seqs_3.txt
 ```
-Nucleotide
-```
-./Code/get_query_seqs.py hlorente@ucm.es Example/query_seqs_4.txt
-```
 
 #### 4.- Refine to each query and general refine
-Protein
+Protein. Same filters as in 3 plus sequences just from 1999.
 ```
-./Code/get_query_seqs.py hlorente@ucm.es Example/query_seqs_3.txt --refine 'AND vertebrate'
+./Code/get_query_seqs.py hlorente@ucm.es Example/query_seqs_2.txt --refine 'AND ("1999/01/01"[PDAT] : "3000/12/31"[PDAT])'
 ```
-Nucleotide
+Nucleotide. Same filters as in 3 plus sequences just from 1999.
 ```
-./Code/get_query_seqs.py hlorente@ucm.es Example/query_seqs_4.txt --refine 'AND vertebrate'
+./Code/get_query_seqs.py hlorente@ucm.es Example/query_seqs_3.txt --refine 'AND ("1999/01/01"[PDAT] : "3000/12/31"[PDAT])'
 ```
 More info about filters and field tags at x and reading y.
 
@@ -434,17 +433,17 @@ Custom directory. Output will be stored at custom directory (where the file is l
 
 #### 2.- Adding seqs for future alingment. Recommended for Genomic sequences
 Genomic directory, sequences of 20,000 positions if possible. Output will be stored at ./Data/Genomic/Species_directory<br />
-20 sequences from the dataset of query_seqs.txt.
+20 sequences from the dataset of nucleotide_query_seqs.fas.
 ```
-./Code/get_RAW_sequences.py --genomic --in_len --query_seqs ./Example/query_seqs.txt --query_seqs_num 20 --email hlorente@ucm.es
+./Code/get_RAW_sequences.py --genomic --in_len --query_seqs ./Example/nucleotide_query_seqs.fas --query_seqs_num 20 --email hlorente@ucm.es
 ```
 
 #### 3.- Changing genome and BLAST pattern
 Genomic directory, sequences of 20,000 positions if possible. Output will be stored at ./Data/Genomic/Species_directory<br />
-20 sequences from the dataset of query_seqs.txt.
+20 sequences from the dataset of nucleotide_query_seqs.fas.
 Program will look for 'unique.txt' and for '.fas'.
 ```
-./Code/get_RAW_sequences.py --genomic --in_len --blast_pattern 'unique.txt' --genome_pattern '.fas' --query_seqs ./Example/query_seqs.txt --query_seqs_num 20 --email hlorente@ucm.es
+./Code/get_RAW_sequences.py --genomic --in_len --blast_pattern 'unique.txt' --genome_pattern '.fas' --query_seqs ./Example/nucleotide_query_seqs.fas --query_seqs_num 20 --email hlorente@ucm.es
 ```
 #### 4.- Changing length of genomic extracted sequence
 Genomic directory, sequences of 30,000 positions if possible. Output will be stored at ./Data/Genomic/Species_directory
