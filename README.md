@@ -73,7 +73,7 @@ Type on terminal get_genomes.py -h for further information.<br />
 
 ### USAGE:<br />
 
-**get_genomes.py 'e-mail' 'query.txt' **<br />
+**get_genomes.py 'e-mail' 'query.txt' **
 
 ### PARAMETERS:<br />
 
@@ -94,50 +94,52 @@ Examples files are availabe at Example directory.
 
 #### 1.- Simple search
 Query txt with simple searches, just taxa nor filters or field tags. No refine argument.<br />
-See ./Example/query_genome_2.txt for examples of queries.<br />
+See ./Example/query_genome.txt for examples of queries.<br />
 Creates ./Data directory and ./Data/Genomic, ./Data/Rna and ./Data/Protein subdirectories.<br />
 Nor filters or field tags applied. Not curated and redundant genomes (one genom for more than one species is used).<br />
 Use this when you do not care very much about filtering.<br />
 
 Genomic
 ```
-./Code/get_genomes.py hlorente@ucm.es Example/query.txt
+./Code/get_genomes.py hlorente@ucm.es Example/query_genome.txt
 ```
 Protein. Look for genomic data as backup (For transcrits use --rna)
 ```
-./Code/get_genomes.py hlorente@ucm.es Example/query.txt --protein
+./Code/get_genomes.py hlorente@ucm.es Example/query_genome.txt --protein
 ```
 Exclusive protein. No backup. (For transcrits use --rna)
 ```
-./Code/get_genomes.py hlorente@ucm.es Example/query.txt --protein --exlusive
+./Code/get_genomes.py hlorente@ucm.es Example/query_genome.txt --protein --exlusive
 ```
 Protein and Rna. Genomic search as backup
 ```
-./Code/get_genomes.py hlorente@ucm.es Example/query.txt --protein --rna
+./Code/get_genomes.py hlorente@ucm.es Example/query_genome.txt --protein --rna
 ```
 Rna donwload changing number of records downloaded. Will donwload until 1000 genomes if available. By default 200 are donwloaded.
 ```
-./Code/get_genomes.py hlorente@ucm.es Example/query.txt --rna --retmax 1000
+./Code/get_genomes.py hlorente@ucm.es Example/query_genome.txt --rna --retmax 1000
 ```
 #### 2.- Refine search using --refine argument. **Recomended**
 Default. Applies Representative (just one genome for species), Latest, Not Anomalous.<br />
 Just protein example. For rna, genomic, exclusive or retmax argument see 1 above and them to this command line.<br />
 ```
-./Code/get_genomes.py hlorente@ucm.es Example/query.txt --protein --refine
+./Code/get_genomes.py hlorente@ucm.es Example/query_genome.txt --protein --refine
 ```
-Own filters or field tags. 
+Own filters or field tags. Just genomes annotated at chromosome level
 ```
-./Code/get_genomes.py hlorente@ucm.es Example/query.txt --protein --refine ''
+./Code/get_genomes.py hlorente@ucm.es Example/query_genome.txt --protein --refine 'AND "chromosome level"[filter]'
 ```
-More info about filters and field tags at x and reading y.
+More info about filters and field tags at https://www.ncbi.nlm.nih.gov/assembly/help/ and reading https://www.ncbi.nlm.nih.gov/books/NBK3837/ - Entre-zHelp.Entrez_Searching_Options.<br />
 
 #### 3.- Refine applied to each query
 You must add a the field tags or filters after your query.<br />
 See ./Example/query_genome_2.txt for examples of queries.<br />
 As each contains is own filters or field tags this will be applied exclusively.<br />
+For gobioidei it will download just genomes annotated at chromosome level.
+For _Homo sapiens_ all the 
 Just protein example. For rna, genomic, exclusive or retmax argument see 1 above and them to this command line.<br />
 ```
-./Code/get_genomes.py hlorente@ucm.es Example/query_filters.txt --protein
+./Code/get_genomes.py hlorente@ucm.es Example/query_genome_2.txt --protein
 ```
 
 #### 4.- Refine to each query and general refine
@@ -146,7 +148,7 @@ See ./Example/query_genome_2.txt for examples of queries.<br />
 As each contains is own filters or field tags this will be applied exclusively.<br />
 Just protein example. For rna, genomic, exclusive or retmax argument see 1 above and them to this command line.<br />
 ```
-./Code/get_genomes.py hlorente@ucm.es Example/query_filters.txt --protein --refine ''
+./Code/get_genomes.py hlorente@ucm.es Example/query_genome_2.txt --protein --refine 'AND "chromosome level"[filter]'
 ```
 ## get_query_seqs.py<br />
 
