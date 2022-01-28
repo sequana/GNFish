@@ -26,10 +26,10 @@ trimal.py -> Runs trimAl program for trimming alignments.<br />
 **This software is provided as is without warranty of any kind.**<br />
 <br />
 People wishing to contribute to the software, report issues or seek support can contact Hector Lorente Martinez at hlorente@ucm.es<br />
-<br />
-<br />
+
+
 ## Download<br />
-<br />
+
 Download scripts from https://github.com/hectorloma/GNFish<br />
 In linux terminal
 
@@ -48,6 +48,7 @@ chmod +x *.py
 
 
 ## Dependencies<br />
+
 This software uses Biopython module in python 3 (tested version 1.78-2). It can be installed in your system using pip:
 ```
 pip install biopython 
