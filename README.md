@@ -73,8 +73,8 @@ Type on terminal get_genomes.py -h for further information.<br />
 ### PARAMETERS:<br />
 
 **--email** -> mandatory e-mail for NCBI searches<br />
-**--query**'-> file with the queries. Usually simple taxa names (species, group). Field tags or filters can be added to each query. See examples below or look at Examples directory for examples of query files.<br />
-Optional parameters<br />
+**--query**-> file with the queries. Usually simple taxa names (species, group). Field tags or filters can be added to each query. See examples below or look at Examples directory for examples of query files.<br />
+Optional parameters
 **--genomic** -> downloads whole genomic data<br />
 **--rna** -> downloads protein annotation data<br />
 **--protein** ->download protein annotation data', action='store_true')<br />
