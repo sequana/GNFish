@@ -344,9 +344,9 @@ Custom directory
 ### DESCRIPTION:<br />
 
 Gets unique hits from BLAST output files based on genomes IDs.<br />
-The program search for '.tsv' files. Change this with --pattern argument
-Generates output with 'unique.tsv' extension.
-Outputs will be stored at Genomic, Rna, Protein or custom directory.
+The program search for '.tsv' files. Change this with --pattern argument.<br />
+Generates output with 'unique.tsv' extension.<br />
+Outputs will be stored at Genomic, Rna, Protein or custom directory.<br />
 
 Type on terminal get_unique_hits.py -h for further information.<br />
 
@@ -383,4 +383,72 @@ Custom directory. Output will be stored at custom directory (where the file is l
 Using '.txt'. Program will serach for '.txt' files.
 ```
 ./Code/get_unique_hits.py --protein --pattern '.txt'
+```
+
+## get_RAW_sequences.py <br />
+
+### DESCRIPTION:<br />
+
+Gets RAW sequences from genomes based on 'unique.tsv' files.<br />
+The program search for 'unique.tsv' and '.f[a,n]a files. Change this with --blast_pattern an--genome_pattern arguments.<br />
+Genome and Blast unique output file must have a "Genus_species_assemblyID" structure or the name provided by NCBI when downloaded.<br />
+
+Type on terminal get_unique_hits.py -h for further information.<br />
+
+### USAGE:<br />
+
+**get_unique_hits.py  --data_type or --directory 'path' **<br />
+
+### PARAMETERS:<br />
+
+Optional parameters:<br />
+**--directory** -> path to folders enclosing genomes<br />
+**--genomic** -> looks at ./Data/Genomic<br />
+**--rna** -> looks at ./Data/Rna<br />
+**--protein** -> looks at ./Data/Protein<br />
+**--blast_pattern** -> custom pattern to find Blast output files. Default ".tsv"<br />
+**--genome_pattern** -> pattern to find genome files. Default ".f[a,n]a"<br />
+**--in_len** -> Number of sites extracted upstream and downstream from the blast hit. Default 10000. A whole sequence of at least 20000 sites if exists<br />
+**--query_seqs** -> Use it when you want to attach some query sequences according to BLAST results for future alignments<br />
+**--query_seqs_num** -> Maximum number of query sequences extracted. Use it when you want to attach some sequences to genomic sequences for future alignments. 5 by default<br />
+**--email** -> Mandatory when you want to download some sequences to complete the RAW files for future alignments. As in get_query_seqs<br />
+
+
+### EXAMPLES:
+
+Examples files are availabe at Example directory.
+
+#### 1.- Default
+
+Protein directory. Output will be stored at ./Data/Protein/Species_directory
+```
+./Code/get_RAW_sequences.py --protein
+```
+Genomic directory, sequences of 20,000 positions if possible. Output will be stored at ./Data/Genomic/Species_directory
+```
+./Code/get_RAW_sequences.py --genomic --in_len
+```
+Custom directory. Output will be stored at custom directory (where the file is located)
+```
+./Code/get_RAW_sequences.py --directory 'path_to_custom_directory'
+```
+
+#### 2.- Adding seqs for future alingment. Recommended for Genomic sequences
+Genomic directory, sequences of 20,000 positions if possible. Output will be stored at ./Data/Genomic/Species_directory<br />
+20 sequences from the dataset of query_seqs.txt.
+```
+./Code/get_RAW_sequences.py --genomic --in_len --query_seqs ./Example/query_seqs.txt --query_seqs_num 20 --email hlorente@ucm.es
+```
+
+#### 3.- Changing genome and BLAST pattern
+Genomic directory, sequences of 20,000 positions if possible. Output will be stored at ./Data/Genomic/Species_directory<br />
+20 sequences from the dataset of query_seqs.txt.
+Program will look for 'unique.txt' and for '.fas'.
+```
+./Code/get_RAW_sequences.py --genomic --in_len --blast_pattern 'unique.txt' --genome_pattern '.fas' --query_seqs ./Example/query_seqs.txt --query_seqs_num 20 --email hlorente@ucm.es
+```
+#### 3.- Changing genome and BLAST pattern
+Genomic directory, sequences of 30,000 positions if possible. Output will be stored at ./Data/Genomic/Species_directory
+```
+./Code/get_RAW_sequences.py --genomic --in_len 15000
 ```
