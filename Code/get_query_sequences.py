@@ -100,7 +100,7 @@ def get_seqs_data(term, retmax, name):
         for row in rows:
             file.write(row)
             
-
+create_directory('../Data')
 path = path +'/../Data'
 create_directory('Query_seqs')
 path = path +'./Query_seqs'
