@@ -60,26 +60,30 @@ pip install biopython
 ### DESCRIPTION:<br />
 
 Program for dowloading genomes from NCBI Databases through Entrez. Requires internet conection.<br />
-It needs your e-mail and a file with your queries. By default it will download genomic data, but you can also add protein or RNA, using --protein or --rna respectively.<br />
+It needs your e-mail and a file with your queries.
+Queries are usallly taxa names (see query_genomes examples files at ./Examples)
+By default it will download genomic data, but you can also add protein or RNA, using --protein or --rna respectively.<br />
+Retmax set a maximum number of downloaded genomes for query.
 It creates a directory named Data and three subdirectories named Genomic, Rna and Protein where it downloads the genomes.<br />
 Genomes file are compressed you must descompress for working with them (see decompress genome file).<br />
 Genome file name will be "Genus_species_assemblyID_datatype.f[n,a]a".
+
 
 Type on terminal get_genomes.py -h for further information.<br />
 
 ### USAGE:<br />
 
-**get_genomes.py 'e-mail' 'query.txt' -c convertfile_Y/N > assembly.fas**<br />
+**get_genomes.py 'e-mail' 'query.txt' **<br />
 
 ### PARAMETERS:<br />
 
 **--email** -> mandatory e-mail for NCBI searches<br />
-**--query**-> file with the queries. Usually simple taxa names (species, group). Field tags or filters can be added to each query. See examples below or look at Examples directory for examples of query files<br />
+**--query** -> file with the queries. Usually simple taxa names (species, group). Field tags or filters can be added to each query. See examples below or look at Examples directory for examples of query files<br />
 
 Optional parameters:<br />
 **--genomic** -> downloads whole genomic data<br />
 **--rna** -> downloads protein annotation data<br />
-**--protein** ->downloads protein annotation data<br />
+**--protein** -> downloads protein annotation data<br />
 **--exclusive** -> downloads just protein or rna annotation data if available. No genomic backup<br />
 **--retmax** -> number of NCBI records reported for every query. Default value equal to 200<br />
 **--refine** -> adds filter or field information to all queries. Constant value AND (latest[filter] AND "representative genome"[filter] AND all[filter] NOT anomalous[filter])<br />
@@ -133,12 +137,16 @@ Just protein example. For rna, genomic, exclusive or retmax argument see 1 above
 ./Code/get_genomes.py hlorente@ucm.es Example/query_filters.txt --protein
 ```
 
-## get_genomes.py<br />
+## get_query_seqs.py<br />
 
 ### DESCRIPTION:<br />
 
-Program for dowloading genomes from NCBI Databases through Entrez. Requires internet conection.<br />
-It needs your e-mail and a file with your queries. By default it will download genomic data, but you can also add protein or RNA, using --protein or --rna respectively.<br />
+Program for dowloading protein or nucleotide from NCBI Databases through Entrez. Requires internet conection.<br />
+It needs your e-mail and a file with your queries.
+Queries must follow "Gene name (filters). If no filters type () after the gene name.
+By default it will download protein data, but you can change using --nucleotide parameter.<br />
+Retmax set a maximum number of downloaded genomes for query.
+Curated refine the search or protein, just those entries which include the name of the protein in Protein Feature.
 It creates a directory named Data and three subdirectories named Genomic, Rna and Protein where it downloads the genomes.<br />
 Genomes file are compressed you must descompress for working with them (see decompress genome file).<br />
 
@@ -146,17 +154,17 @@ Type on terminal get_genomes.py -h for further information.<br />
 
 ### USAGE:<br />
 
-**get_protein_query_.py 'e-mail' 'query.txt' -c convertfile_Y/N > assembly.fas**<br />
+**get_query_seqs_.py 'e-mail' 'query.txt' **<br />
 
 ### PARAMETERS:<br />
 
 **--email** -> mandatory e-mail for NCBI searches<br />
-**--query**-> file with the queries. Usually simple taxa names (species, group). Field tags or filters can be added to each query. See examples below or look at Examples directory for examples of query files<br />
+**--query** -> file with the queries. Usually simple taxa names (species, group). Field tags or filters can be added to each query. See examples below or look at Examples directory for examples of query files<br />
 
 Optional parameters:<br />
 **--genomic** -> downloads whole genomic data<br />
 **--rna** -> downloads protein annotation data<br />
-**--protein** ->downloads protein annotation data<br />
+**--protein** -> downloads protein annotation data<br />
 **--exclusive** -> downloads just protein or rna annotation data if available. No genomic backup<br />
 **--retmax** -> number of NCBI records reported for every query. Default value equal to 200<br />
 **--refine** -> adds filter or field information to all queries. Constant value AND (latest[filter] AND "representative genome"[filter] AND all[filter] NOT anomalous[filter])<br />
