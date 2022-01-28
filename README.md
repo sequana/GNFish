@@ -73,15 +73,15 @@ Type on terminal get_genomes.py -h for further information.<br />
 ### PARAMETERS:<br />
 
 **--email** -> mandatory e-mail for NCBI searches<br />
-**--query**-> file with the queries. Usually simple taxa names (species, group). Field tags or filters can be added to each query. See examples below or look at Examples directory for examples of query files.<br />
+**--query**-> file with the queries. Usually simple taxa names (species, group). Field tags or filters can be added to each query. See examples below or look at Examples directory for examples of query files<br />
 
 Optional parameters:<br />
-**--genomic** -> downloads whole genomic data
-**--rna** -> downloads protein annotation data
-**--protein** ->downloads protein annotation data
-**--exclusive** -> downloads just protein or rna annotation data if available. No genomic backup.
-**--retmax** -> number of NCBI records reported for every query. Default value equal to 200.
-**--refine** -> adds filter or field information to all queries. Constant value AND (latest[filter] AND "representative genome"[filter] AND all[filter] NOT anomalous[filter])
+**--genomic** -> downloads whole genomic data<br />
+**--rna** -> downloads protein annotation data<br />
+**--protein** ->downloads protein annotation data<br />
+**--exclusive** -> downloads just protein or rna annotation data if available. No genomic backup<br />
+**--retmax** -> number of NCBI records reported for every query. Default value equal to 200<br />
+**--refine** -> adds filter or field information to all queries. Constant value AND (latest[filter] AND "representative genome"[filter] AND all[filter] NOT anomalous[filter])<br />
 
 ### EXAMPLES:
 
@@ -114,8 +114,8 @@ Rna donwload changing number of records downloaded. Will donwload until 1000 gen
 ./Code/get_genomes.py -hlorente@ucm.es Example/query.txt --rna --retmax 1000
 ```
 #### 2.- Refine search using --refine argument. **Recomended**
-Default. Applies Representative (just one genome for species), Latest, Not Anomalous.
-Just protein example. For rna, genomic, exclusive or retmax argument see 1 above and them to this command line.
+Default. Applies Representative (just one genome for species), Latest, Not Anomalous.<br />
+Just protein example. For rna, genomic, exclusive or retmax argument see 1 above and them to this command line.<br />
 ```
 ./Code/get_genomes.py -hlorente@ucm.es Example/query.txt --protein --refine
 ```
@@ -126,8 +126,8 @@ Own filters or field tags.
 More info about filters and field tags at x and reading y.
 
 #### 3.- Refine applied to each query
-As each contains is own filters or field tags this will be applied exclusively. See ./Example/query_filters.txt for a scheme.
-Just protein example. For rna, genomic, exclusive or retmax argument see 1 above and them to this command line.
+As each contains is own filters or field tags this will be applied exclusively. See ./Example/query_filters.txt for a scheme.<br />
+Just protein example. For rna, genomic, exclusive or retmax argument see 1 above and them to this command line.<br />
 ```
 ./Code/get_genomes.py -hlorente@ucm.es Example/query_filters.txt --protein
 ```
