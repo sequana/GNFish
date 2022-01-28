@@ -14,12 +14,12 @@ There are 12 scripts:<br />
 **decompress_genomes.py** -> Decompress genome files.<br />
 **get_combined_seqs.py** -> Merge sequences for creating a whole alingment.<br />
 **get_genomes.py** -> Download genomes from NCBI databases<br />
-**get_protein_query_.py** -> Download a dataset of protein sequences that act as query for BLAST searches<br />
+**get_query_sequences.py** -> Download a dataset of protein sequences that act as query for BLAST searches<br />
 **get_RAW_sequences.py** -> Extracts the sequences mapped after BLAST searches<br />
 **get_unique_hits.py** -> Gets unique hits from Blast output files based on genomes IDs<br />
-**iqtree.py** -> Runs IQ-Tree program for phylogentic inference<br />
-**translate_seq.py** -> Translate nucleotide sequences to protein.<br />
-**trimal.py** -> Runs trimAl program for trimming alignments.<br />
+**phylogenetic_inference.py** -> Runs IQ-Tree program for phylogentic inference<br />
+**translate_sequences.py** -> Translate nucleotide sequences to protein.<br />
+**alignment_trimming.py** -> Runs trimAl program for trimming alignments.<br />
 
 **This software is released under the license GNU GPLv3.**<br />
 
