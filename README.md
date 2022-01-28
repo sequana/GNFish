@@ -5,7 +5,7 @@ Suite of small Python programs following the pipeline detailed in (DOI of articl
 (3) production of a multiple sequence alignment<br />
 (4) selection of best-fit model of evolution<br />
 (5) solid reconstruction of a phylogenetic tree.<br />
-
+<br />
 There are 12 scripts:<br />
 <br />
 align_sequences.py -> Align sequences using MAFFT software<br />
@@ -20,24 +20,24 @@ get_unique_hits.py -> Gets unique hits from Blast output files based on genomes 
 iqtree.py -> Runs IQ-Tree program for phylogentic inference<br />
 translate_seq.py -> Translate nucleotide sequences to protein.<br />
 trimal.py -> Runs trimAl program for trimming alignments.<br />
-
+<br />
 **This software is released under the license GNU GPLv3.**<br />
-
-**This software is provided as is without warranty of any kind.** 
-
-People wishing to contribute to the software, report issues or seek support can contact Hector Lorente Martinez at hlorente@ucm.es
-
-
-# Download
-
-Download scripts from https://github.com/hectorloma/GNFish
-
-In linux terminal
-
+<br />
+**This software is provided as is without warranty of any kind.**<br />
+<br />
+People wishing to contribute to the software, report issues or seek support can contact Hector Lorente Martinez at hlorente@ucm.es<br />
+<br />
+<br />
+# Download<br />
+<br />
+Download scripts from https://github.com/hectorloma/GNFish<br />
+<br />
+In linux terminal<br />
+<br />
 ```
 git clone https://github.com/hectorloma/GNFish
 ```
-
+<br />
 If git is not installed visit https://github.com/git-guides/install-git  
 which is available for any OS
 
