@@ -28,7 +28,7 @@ trimal.py -> Runs trimAl program for trimming alignments.<br />
 People wishing to contribute to the software, report issues or seek support can contact Hector Lorente Martinez at hlorente@ucm.es<br />
 <br />
 <br />
-# Download<br />
+## Download<br />
 <br />
 Download scripts from https://github.com/hectorloma/GNFish<br />
 In linux terminal
@@ -47,7 +47,7 @@ chmod +x *.py
 ```
 <br />
 <br />
-# Dependencies<br />
+## Dependencies<br />
 <br />
 This software uses Biopython module in python 3 (tested version 1.78-2). It can be installed in your system using pip:
 ```
@@ -55,9 +55,9 @@ pip install biopython
 ```
 <br />
 <br />
-# get_genomes.py<br />
+## get_genomes.py<br />
 <br />
-**DESCRIPTION:**<br />
+### DESCRIPTION:<br />
 <br />
 Program for dowloading genomes from NCBI Databases through Entrez. Requires internet conection.<br />
 It needs your e-mail and a file with your queries. By default it will download genomic data, but you can also add protein or RNA, using --protein or --rna respectively.<br />
@@ -66,11 +66,11 @@ Genomes file are compressed you must descompress for working with them (see deco
 <br />
 Type on terminal get_genomes.py -h for further information.<br />
 <br />
-**USAGE:**<br />
+###USAGE:<br />
 <br />
 **get_genomes.py 'e-mail' 'query.txt' -c convertfile_Y/N > assembly.fas**<br />
 <br />
-**PARAMETERS:**<br />
+### PARAMETERS:<br />
 <br />
 **--email** -> mandatory e-mail for NCBI searches<br />
 **--query**'-> file with the queries. Usually simple taxa names (species, group). Field tags or filters can be added to each query. See examples below or look at Examples directory for examples of query files.<br />
@@ -88,7 +88,7 @@ Optional parameters<br />
 
 **-c CONVERTFILE, --convertfile** -> Gene names (fasta headers) from MITOS2 will be simplified and made compliant with aln2tbl. Yes=Y No=N
 
-**EXAMPLES:**
+### EXAMPLES:
 
 Examples files are availabe at Example directory.
 
