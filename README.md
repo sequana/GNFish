@@ -302,39 +302,85 @@ Examples files are availabe at Example directory.
 
 Protein directory
 ```
-./Code/blast.py hlorente@ucm.es 'path_to_bin_directory' ./Example/protein_query.fas 'prot' --protein
+./Code/blast.py 'path_to_bin_directory' ./Example/protein_query.fas 'prot' --protein
 ```
 Custom directory
 ```
-./Code/blast.py hlorente@ucm.es 'path_to_bin_directory' ./Example/protein_query.fas 'prot' --directory 'path_to_custom_directory' --protein
+./Code/blast.py 'path_to_bin_directory' ./Example/protein_query.fas 'prot' --directory 'path_to_custom_directory' --protein
 ```
 
 #### 2.- Query and database (genome) are nucleotides
 Nucleotide directory
 ```
-./Code/blast.py hlorente@ucm.es 'path_to_bin_directory' ./Example/nucleotide_query.fas 'nucl' --rna
+./Code/blast.py 'path_to_bin_directory' ./Example/nucleotide_query.fas 'nucl' --rna
 ```
 Custom directory
 ```
-./Code/blast.py hlorente@ucm.es 'path_to_bin_directory' ./Example/nucleotide_query.fas 'nucl' --directory 'path_to_custom_directory' --rna
+./Code/blast.py 'path_to_bin_directory' ./Example/nucleotide_query.fas 'nucl' --directory 'path_to_custom_directory' --rna
 ```
 
 #### 3.- Query is protein and database (genome) is nucleotide
 Nucleotide directory
 ```
-./Code/blast.py hlorente@ucm.es 'path_to_bin_directory' ./Example/protein_query.fas 'prot' --rna
+./Code/blast.py 'path_to_bin_directory' ./Example/protein_query.fas 'prot' --rna
 ```
 Custom directory
 ```
-./Code/blast.py hlorente@ucm.es 'path_to_bin_directory' ./Example/protein_query.fas 'prot' --directory 'path_to_custom_directory' --rna
+./Code/blast.py 'path_to_bin_directory' ./Example/protein_query.fas 'prot' --directory 'path_to_custom_directory' --rna
 ```
 
 #### 4.- Query is nucleotide and database (genome) is protein
 Protein directory
 ```
-./Code/blast.py hlorente@ucm.es 'path_to_bin_directory' ./Example/protein_query.fas 'nucl' --protein
+./Code/blast.py 'path_to_bin_directory' ./Example/protein_query.fas 'nucl' --protein
 ```
 Custom directory
 ```
-./Code/blast.py hlorente@ucm.es 'path_to_bin_directory' ./Example/protein_query.fas 'nucl' --directory 'path_to_custom_directory' --protein
+./Code/blast.py 'path_to_bin_directory' ./Example/protein_query.fas 'nucl' --directory 'path_to_custom_directory' --protein
+```
+
+## get_unique_hits.py<br />
+
+### DESCRIPTION:<br />
+
+Gets unique hits from BLAST output files based on genomes IDs.<br />
+The program search for '.tsv' files. Change this with --pattern argument
+Generates output with 'unique.tsv' extension.
+Outputs will be stored at Genomic, Rna, Protein or custom directory.
+
+Type on terminal get_unique_hits.py -h for further information.<br />
+
+### USAGE:<br />
+
+**get_unique_hits.py  --data_type or --directory 'path' **<br />
+
+### PARAMETERS:<br />
+
+Optional parameters:<br />
+**--directory** -> path to folders enclosing genomes<br />
+**--genomic** -> looks at ./Data/Genomic<br />
+**--rna** -> looks at ./Data/Rna<br />
+**--protein** -> looks at ./Data/Protein<br />
+**--pattern** -> custom pattern to find Blast output files. Default ".tsv"<br />
+
+
+### EXAMPLES:
+
+Examples files are availabe at Example directory.
+
+#### 1.- Default
+
+Protein directory. Output will be stored at ./Data/Protein/Species_directory
+```
+./Code/get_unique_hits.py --protein
+```
+Custom directory. Output will be stored at custom directory (where the file is located)
+```
+./Code/get_unique_hits.py --directory 'path_to_custom_directory'
+```
+
+#### 2.- New pattern
+Using '.txt'. Program will serach for '.txt' files.
+```
+./Code/get_unique_hits.py --protein --pattern '.txt'
 ```
