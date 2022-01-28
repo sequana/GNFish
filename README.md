@@ -61,7 +61,7 @@ pip install biopython
 
 Program for dowloading genomes from NCBI Databases through Entrez. Requires internet conection.<br />
 It needs your e-mail and a file with your queries.<br />
-Queries are usallly taxa names (see query_genomes examples files at ./Examples)<br />
+Queries are usallly taxa names (see query_genomes examples files at ./Example)<br />
 By default it will download genomic data, but you can also add protein or RNA, using --protein or --rna respectively.<br />
 Retmax set a maximum number of downloaded genomes for query.<br />
 It creates a directory named Data and three subdirectories named Genomic, Rna and Protein where it downloads the genomes.<br />
@@ -78,7 +78,7 @@ Type on terminal get_genomes.py -h for further information.<br />
 ### PARAMETERS:<br />
 
 **--email** -> mandatory e-mail for NCBI searches<br />
-**--query** -> file with the queries. Usually simple taxa names (species, group). Field tags or filters can be added to each query. See examples below or look at Examples directory for examples of query files<br />
+**--query** -> file with the queries. Usually simple taxa names (species, group). Field tags or filters can be added to each query. See examples below or look at Example directory for examples of query files<br />
 
 Optional parameters:<br />
 **--genomic** -> downloads whole genomic data<br />
@@ -92,26 +92,26 @@ Optional parameters:<br />
 
 Examples files are availabe at Example directory.
 
-#### 1.- Plain search
+#### 1.- Simple search
 Query txt with simple searches, just taxa nor filters or field tags. No refine argument.<br />
-See ./Examples/query_genome_3.txt for examples of queries.<br />
+See ./Example/query_genome_2.txt for examples of queries.<br />
 Creates ./Data directory and ./Data/Genomic, ./Data/Rna and ./Data/Protein subdirectories.<br />
 Nor filters or field tags applied. Not curated and redundant genomes (one genom for more than one species is used).<br />
 Use this when you do not care very much about filtering.<br />
 
-Genomic donwload
+Genomic
 ```
 ./Code/get_genomes.py hlorente@ucm.es Example/query.txt
 ```
-Protein donwload, look for genomic data as backup (For transcrits use --rna)
+Protein. Look for genomic data as backup (For transcrits use --rna)
 ```
 ./Code/get_genomes.py hlorente@ucm.es Example/query.txt --protein
 ```
-Exclusive protein download. No backup. (For transcrits use --rna)
+Exclusive protein. No backup. (For transcrits use --rna)
 ```
 ./Code/get_genomes.py hlorente@ucm.es Example/query.txt --protein --exlusive
 ```
-Protein and Rna downloading. Genomic search as backup
+Protein and Rna. Genomic search as backup
 ```
 ./Code/get_genomes.py hlorente@ucm.es Example/query.txt --protein --rna
 ```
@@ -133,13 +133,21 @@ More info about filters and field tags at x and reading y.
 
 #### 3.- Refine applied to each query
 You must add a the field tags or filters after your query.<br />
-See ./Examples/query_genome_3.txt for examples of queries.<br />
+See ./Example/query_genome_2.txt for examples of queries.<br />
 As each contains is own filters or field tags this will be applied exclusively.<br />
 Just protein example. For rna, genomic, exclusive or retmax argument see 1 above and them to this command line.<br />
 ```
 ./Code/get_genomes.py hlorente@ucm.es Example/query_filters.txt --protein
 ```
 
+#### 4.- Refine to each query and general refine
+You must add a the field tags or filters after your query.<br />
+See ./Example/query_genome_2.txt for examples of queries.<br />
+As each contains is own filters or field tags this will be applied exclusively.<br />
+Just protein example. For rna, genomic, exclusive or retmax argument see 1 above and them to this command line.<br />
+```
+./Code/get_genomes.py hlorente@ucm.es Example/query_filters.txt --protein --refine ''
+```
 ## get_query_seqs.py<br />
 
 ### DESCRIPTION:<br />
@@ -153,11 +161,11 @@ Curated refine the search or protein, just those entries which include the name 
 Stores sequences at ./Data/Query_seqs.<br />
 Output file will be named "genename_query_seqs.fas.<br />
 
-Type on terminal get_genomes.py -h for further information.<br />
+Type on terminal get_query_seqs.py -h for further information.<br />
 
 ### USAGE:<br />
 
-**get_query_seqs_.py 'e-mail' 'query.txt' **<br />
+**get_query_seqs.py 'e-mail' 'query.txt' **<br />
 
 ### PARAMETERS:<br />
 
@@ -179,38 +187,154 @@ Query txt with simple searches, just gene name and filters equal to ().<br />
 Creates ./Data/Query_seqs directory.<br />
 Peforms well for protein for nucleotide it is better to see 2.
 
-Protein download
+Protein
 ```
-./Code/get_query_seqs_.py hlorente@ucm.es Example/query_seqs.txt
+./Code/get_query_seqs.py hlorente@ucm.es Example/query_seqs.txt
 ```
-Protein download, restricting maximum number to 50
+Protei. Downloading restricting maximum number to 50
 ```
-./Code/get_query_seqs_.py hlorente@ucm.es Example/query_seqs.txt --retmax 50
+./Code/get_query_seqs.py hlorente@ucm.es Example/query_seqs.txt --retmax 50
 ```
-Protein download, restricting maximum number to 50 and curating
+Protei. Downloading restricting maximum number to 50 and curating
 ```
-./Code/get_query_seqs_.py hlorente@ucm.es Example/query_seqs.txt --retmax 50 --curated
+./Code/get_query_seqs.py hlorente@ucm.es Example/query_seqs.txt --retmax 50 --curated
 ```
-Nucleotide downloading, restricting maximum number to 50. Better see 2.
+Nucleotide. Downloading restricting maximum number to 50. Better see 2.
 ```
-./Code/get_query_seqs_.py hlorente@ucm.es Example/query_seqs.txt --retmax 50 --nucleotide
+./Code/get_query_seqs.py hlorente@ucm.es Example/query_seqs.txt --retmax 50 --nucleotide
 ```
 
-#### 2.- Refine search using --refine argument.
-Default. Applies Representative (just one genome for species), Latest, Not Anomalous.<br />
-Just protein example. For rna, genomic, exclusive or retmax argument see 1 above and them to this command line.<br />
+#### 2.- Refine search using --refine argument. **Recommended**
+Default. Applies refseq[filter].<br />
+Protein download, restricting maximum number to 50, curating, refine default just sequences from RefSeq.<br />
 ```
-./Code/get_genomes.py hlorente@ucm.es Example/query.txt --protein --refine
+./Code/get_query_seqs.py hlorente@ucm.es Example/query_seqs.txt --retmax 50 --curated --refine
 ```
-Own filters or field tags. 
+Protein. Protein. Downloading restricting maximum number to 50, curating and just sequences from RefSeq (refine argument).
 ```
-./Code/get_genomes.py hlorente@ucm.es Example/query.txt --protein --refine ''
+./Code/get_query_seqs.py hlorente@ucm.es Example/query_seqs.txt --retmax 50 --curated --refine 
+```
+Nucleotide **recommended** use. Dowloading restricting maximum number to 50 and just transcripts (refine argument).
+```
+./Code/get_query_seqs.py hlorente@ucm.es Example/query_seqs.txt --retmax 50 --curated --refine 'biomol_mrna[PROP]'
+```
+
+#### 3.- Refine applied to each query
+You must add a the field tags or filters after your query.<br />
+As each query contains is own filters or field tags these will be applied exclusively to every query. See ./Example/query_seqs_2.txt and quer_seqs_3.txt for a scheme.<br />
+Protein
+```
+./Code/get_query_seqs.py hlorente@ucm.es Example/query_seqs_3.txt
+```
+Nucleotide
+```
+./Code/get_query_seqs.py hlorente@ucm.es Example/query_seqs_4.txt
+```
+
+#### 4.- Refine to each query and general refine
+Protein
+```
+./Code/get_query_seqs.py hlorente@ucm.es Example/query_seqs_3.txt --refine 'AND vertebrate'
+```
+Nucleotide
+```
+./Code/get_query_seqs.py hlorente@ucm.es Example/query_seqs_4.txt --refine 'AND vertebrate'
 ```
 More info about filters and field tags at x and reading y.
 
-#### 3.- Refine applied to each query
-As each contains is own filters or field tags this will be applied exclusively. See ./Example/query_filters.txt for a scheme.<br />
-Just protein example. For rna, genomic, exclusive or retmax argument see 1 above and them to this command line.<br />
+## decompress_genomes.py<br />
+
+### DESCRIPTION:<br />
+
+Program for decompress downloaded genomes.<br />
+It searchs for '.gz' files. Can be applied to any other '.gz' file.<br />
+With data type (genomic, rna, protein) argument the program will look at ./Data/Datat_type.<br />
+With directory argument  the program will iterativily within the detail path.<br />
+
+Type on terminal decompress_genomes.py -h for further information.<br />
+
+### USAGE:<br />
+
+**decompress_genomes.py --data_type or --directory 'path' **<br />
+
+### PARAMETERS:<br />
+
+Optional parameters:<br />
+**--directory** -> path to folders enclosing files<br />
+**--genomic** -> looks at ./Data/Genomic<br />
+**--rna** -> looks at ./Data/Rna<br />
+**--protein** -> looks at ./Data/Protein<br />
+
+## blast.py<br />
+
+### DESCRIPTION:<br />
+
+BLAST against genome .fna and .faa files.<br />
+It requires BLAST download at https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/.
+
+Type on terminal blast.py -h for further information.<br />
+
+### USAGE:<br />
+
+**blast.py --data_type or --directory 'path' **<br />
+
+### PARAMETERS:<br />
+
+**blast_path** -> path to bin ncbi-blast directory<br />
+**query_file** -> path to your query file with your reference sequences (Fasta file with prot or nucl seqs) <br />
+**query_type** -> data type of query sequences. prot or nucl <br />
+
+Optional parameters:<br />
+**--directory** -> path to folders enclosing genomes<br />
+**--genomic** -> looks at ./Data/Genomic<br />
+**--rna** -> looks at ./Data/Rna<br />
+**--protein** -> looks at ./Data/Protein<br />
+**--evalue** -> E-value threshold for search. Default value equal to 1e-10<br />
+**--outfmt** -> Output alignment options. Default value 6<br />
+**--out_exten** -> Extension of the BLAST output file. Default "_out.tsv"<br />
+
+
+### EXAMPLES:
+
+Examples files are availabe at Example directory.
+
+#### 1.- Query and database (genome) are proteins
+
+Protein directory
 ```
-./Code/get_genomes.py hlorente@ucm.es Example/query_filters.txt --protein
+./Code/blast.py hlorente@ucm.es 'path_to_bin_directory' ./Example/protein_query.fas 'prot' --protein
+```
+Custom directory
+```
+./Code/blast.py hlorente@ucm.es 'path_to_bin_directory' ./Example/protein_query.fas 'prot' --directory 'path_to_custom_directory' --protein
+```
+
+#### 2.- Query and database (genome) are nucleotides
+Nucleotide directory
+```
+./Code/blast.py hlorente@ucm.es 'path_to_bin_directory' ./Example/nucleotide_query.fas 'nucl' --rna
+```
+Custom directory
+```
+./Code/blast.py hlorente@ucm.es 'path_to_bin_directory' ./Example/nucleotide_query.fas 'nucl' --directory 'path_to_custom_directory' --rna
+```
+
+#### 3.- Query is protein and database (genome) is nucleotide
+Nucleotide directory
+```
+./Code/blast.py hlorente@ucm.es 'path_to_bin_directory' ./Example/protein_query.fas 'prot' --rna
+```
+Custom directory
+```
+./Code/blast.py hlorente@ucm.es 'path_to_bin_directory' ./Example/protein_query.fas 'prot' --directory 'path_to_custom_directory' --rna
+```
+
+#### 4.- Query is nucleotide and database (genome) is protein
+Protein directory
+```
+./Code/blast.py hlorente@ucm.es 'path_to_bin_directory' ./Example/protein_query.fas 'nucl' --protein
+```
+Custom directory
+```
+./Code/blast.py hlorente@ucm.es 'path_to_bin_directory' ./Example/protein_query.fas 'nucl' --directory 'path_to_custom_directory' --protein
 ```
