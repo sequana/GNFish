@@ -95,33 +95,33 @@ Use this when you do not care very much about filtering.<br />
 
 Genomic donwload
 ```
-./Code/get_genomes.py -hlorente@ucm.es Example/query.txt
+./Code/get_genomes.py hlorente@ucm.es Example/query.txt
 ```
 Protein donwload, look for genomic data as backup (For transcrits use --rna)
 ```
-./Code/get_genomes.py -hlorente@ucm.es Example/query.txt --protein
+./Code/get_genomes.py hlorente@ucm.es Example/query.txt --protein
 ```
 Exclusive protein download. No backup. (For transcrits use --rna)
 ```
-./Code/get_genomes.py -hlorente@ucm.es Example/query.txt --protein --exlusive
+./Code/get_genomes.py hlorente@ucm.es Example/query.txt --protein --exlusive
 ```
 Protein and Rna downloading. Genomic search as backup
 ```
-./Code/get_genomes.py -hlorente@ucm.es Example/query.txt --protein --rna
+./Code/get_genomes.py hlorente@ucm.es Example/query.txt --protein --rna
 ```
 Rna donwload changing number of records downloaded. Will donwload until 1000 genomes if available. By default 200 are donwloaded.
 ```
-./Code/get_genomes.py -hlorente@ucm.es Example/query.txt --rna --retmax 1000
+./Code/get_genomes.py hlorente@ucm.es Example/query.txt --rna --retmax 1000
 ```
 #### 2.- Refine search using --refine argument. **Recomended**
 Default. Applies Representative (just one genome for species), Latest, Not Anomalous.<br />
 Just protein example. For rna, genomic, exclusive or retmax argument see 1 above and them to this command line.<br />
 ```
-./Code/get_genomes.py -hlorente@ucm.es Example/query.txt --protein --refine
+./Code/get_genomes.py hlorente@ucm.es Example/query.txt --protein --refine
 ```
 Own filters or field tags. 
 ```
-./Code/get_genomes.py -hlorente@ucm.es Example/query.txt --protein --refine ''
+./Code/get_genomes.py hlorente@ucm.es Example/query.txt --protein --refine ''
 ```
 More info about filters and field tags at x and reading y.
 
@@ -129,5 +129,5 @@ More info about filters and field tags at x and reading y.
 As each contains is own filters or field tags this will be applied exclusively. See ./Example/query_filters.txt for a scheme.<br />
 Just protein example. For rna, genomic, exclusive or retmax argument see 1 above and them to this command line.<br />
 ```
-./Code/get_genomes.py -hlorente@ucm.es Example/query_filters.txt --protein
+./Code/get_genomes.py hlorente@ucm.es Example/query_filters.txt --protein
 ```
