@@ -33,57 +33,51 @@ People wishing to contribute to the software, report issues or seek support can 
 Download scripts from https://github.com/hectorloma/GNFish<br />
 <br />
 In linux terminal<br />
-
 ```
 git clone https://github.com/hectorloma/GNFish
 ```
-
-If git is not installed visit https://github.com/git-guides/install-git  
-which is available for any OS
-
+If git is not installed visit https://github.com/git-guides/install-git which is available for any OS<br />
+<br />
 Make scripts executable if you want to run it from the very same terminal
-
 ```
 cd GNFish
 ```
-
 ```
 chmod +x *.py
 ```
-
-# Dependencies
-
+<br />
+<br />
+# Dependencies<br />
+<br />
 This software uses Biopython module in python 3 (tested version 1.78-2). It can be installed in your system using pip:
-
 ```
 pip install biopython 
 ```
-
-# get_genomes.py
-
-**DESCRIPTION:**
-
-Program for dowloading genomes from NCBI Databases through Entrez. Requires internet conection.
-It needs your e-mail and a file with your queries. By default it will download genomic data, but you can also add protein or RNA, using --protein or --rna respectively.
-It creates a directory named Data and three subdirectories named Genomic, Rna and Protein where it downloads the genomes.
-Genomes file are compressed you must descompress for working with them (see decompress genome file).
-
-Type on terminal get_genomes.py -h for further information.
-
-**USAGE:**
-
-
-**get_genomes.py 'e-mail' 'query.txt' -c convertfile_Y/N > assembly.fas**
-
-
-**PARAMETERS:**
-
-**--email** -> mandatory e-mail for NCBI searches
-**--query**'-> file with the queries. Usually simple taxa names (species, group). Field tags or filters can be added to each query. See examples below or look at Exampls directory for examples of query files.
-Optional parameters
-**--genomic** downloads whole genomic data
-**--rna', help='download protein annotation data', action='store_true')
-**--protein', help='download protein annotation data', action='store_true')
+<br />
+<br />
+# get_genomes.py<br />
+<br />
+**DESCRIPTION:**<br />
+<br />
+Program for dowloading genomes from NCBI Databases through Entrez. Requires internet conection.<br />
+It needs your e-mail and a file with your queries. By default it will download genomic data, but you can also add protein or RNA, using --protein or --rna respectively.<br />
+It creates a directory named Data and three subdirectories named Genomic, Rna and Protein where it downloads the genomes.<br />
+Genomes file are compressed you must descompress for working with them (see decompress genome file).<br />
+<br />
+Type on terminal get_genomes.py -h for further information.<br />
+<br />
+**USAGE:**<br />
+<br />
+**get_genomes.py 'e-mail' 'query.txt' -c convertfile_Y/N > assembly.fas**<br />
+<br />
+**PARAMETERS:**<br />
+<br />
+**--email** -> mandatory e-mail for NCBI searches<br />
+**--query**'-> file with the queries. Usually simple taxa names (species, group). Field tags or filters can be added to each query. See examples below or look at Examples directory for examples of query files.<br />
+Optional parameters<br />
+**--genomic** -> downloads whole genomic data<br />
+**--rna** -> downloads protein annotation data<br />
+**--protein** ->download protein annotation data', action='store_true')<br />
 **--exclusive', help='download just protein or rna annotation data if available.', action='store_true')
 **--retmax', help='number of NCBI records reported for every query. Default value equal to 200',nargs='?', const=200, type=int, default=200)
 **--refine', help='add
@@ -94,7 +88,7 @@ Optional parameters
 
 **-c CONVERTFILE, --convertfile** -> Gene names (fasta headers) from MITOS2 will be simplified and made compliant with aln2tbl. Yes=Y No=N
 
-**EXAMPLE:**
+**EXAMPLES:**
 
 Examples files are availabe at Example directory.
 
