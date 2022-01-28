@@ -159,7 +159,7 @@ It needs your e-mail and a file with your queries.<br />
 Queries must follow "Gene name (filters). If no filters type () after the gene name.<br />
 By default it will download protein data, but you can change using --nucleotide parameter.<br />
 Retmax set a maximum number of downloaded genomes for query.<br />
-Curated refine the search or protein, just those entries which include the name of the protein in Protein Feature.
+Curated argument refine the search for protein search, just those entries which include the name of the protein in Protein Feature.
 Stores sequences at ./Data/Query_seqs.<br />
 Output file will be named "genename_query_seqs.fas.<br />
 
