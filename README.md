@@ -1,4 +1,14 @@
 # GNFish
+
+============================================================================================================
+
+When using GNFish or part of its code please cite the following paper:
+
+Lorente-Martínez, H., Agorreta, A., & San Mauro, D. (2022). Genomic Fishing and Data Processing for Molecular Evolution Research. Methods and Protocols, 5(2), 26.
+https://doi.org/10.3390/mps5020026
+
+============================================================================================================
+
 Suite of small Python programs following the pipeline detailed in (DOI of article yet to be published) for:<br />
 (1) “fishing” specific gene sequences of interest from genomic data available in NCBI databases<br />
 (2) processing and depuration of retrieved sequences<br />
