@@ -15,7 +15,7 @@ Suite of small Python programs following the pipeline detailed in (DOI of articl
 (3) production of a multiple sequence alignment<br />
 (4) selection of best-fit model of evolution<br />
 (5) solid reconstruction of a phylogenetic tree.<br />
-
+(6)
 There are 12 scripts:<br />
 
 **align_sequences.py** -> Align sequences using MAFFT software<br />
