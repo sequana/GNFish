@@ -167,7 +167,7 @@ Just protein example. For rna, genomic, exclusive or retmax argument see 1 above
 
 ### DESCRIPTION:<br />
 
-Program for dowloading protein or nucleotide from NCBI Databases through Entrez. Requires internet conection.<br />
+Program for downloading protein or nucleotide from NCBI Databases through Entrez. Requires internet conection.<br />
 It needs your e-mail and a file with your queries.<br />
 Queries must follow "Gene name (filters). If no filters type () after the gene name.<br />
 By default it will download protein data, but you can change using --nucleotide parameter.<br />
