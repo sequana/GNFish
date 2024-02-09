@@ -441,7 +441,7 @@ Custom directory. Output will be stored at custom directory (where the file is l
 ./Code/get_RAW_sequences.py --directory 'path_to_custom_directory'
 ```
 
-#### 2.- Adding seqs for future alingment. Recommended for Genomic sequences
+#### 2.- Adding seqs for future alignment. Recommended for Genomic sequences
 Genomic directory, sequences of 20,000 positions if possible. Output will be stored at ./Data/Genomic/Species_directory<br />
 20 sequences from the dataset of nucleotide_query_seqs.fas.
 ```
