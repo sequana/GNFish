@@ -11,4 +11,4 @@ def test_main(tmp_path):
     subprocess.call(f"decompress_genomes --directory {data_dir}", shell=True)
 
     with open(tmp_path / "data" / "genome.fa") as f:
-        assert f.readlines() == [">1\n", "CAGTCGATGCTAGTCGTAGCTGATGTCGATGCTA\no"]
+        assert f.readlines() == [">1\n", "CAGTCGATGCTAGTCGTAGCTGATGTCGATGCTA\n"]
