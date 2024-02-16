@@ -9,16 +9,37 @@ from Bio import SeqIO
 import re
 import argparse
 import csv
+from loguru import logger
 
- 
+
 ##Arguments
-parser = argparse.ArgumentParser(description='Downloads a set of protein for query for BLAST searches. Alternatively you can dowload nucleotides sequences using IDs')
-parser.add_argument('email', help='sets mandatory e-mail for NCBI searches', type=str)
-parser.add_argument('query', help='sets file path with the query', type=argparse.FileType('r'))
-parser.add_argument('--nucleotide', help='for nucleotide downloading', action='store_true')
-parser.add_argument('--refine', help='adds filter or field tags to the query. Constant value refseq[filter]. Follow constant value structure for your custom filters, begin with "AND".', nargs='?', const=' AND refseq[filter]', type=str, default='')
-parser.add_argument('--curated', help='only donwloads sequences with protein name included in Protein Feature. Just for protein searches', action='store_true')
-parser.add_argument('--retmax', help='sets number of searched NCBI records. Default value equal to 200',nargs='?', const=200, type=int, default=200)
+parser = argparse.ArgumentParser(
+    description="Downloads a set of protein for query for BLAST searches. Alternatively you can dowload nucleotides sequences using IDs"
+)
+parser.add_argument("email", help="sets mandatory e-mail for NCBI searches", type=str)
+parser.add_argument("query", help="sets file path with the query", type=argparse.FileType("r"))
+parser.add_argument("--nucleotide", help="for nucleotide downloading", action="store_true")
+parser.add_argument(
+    "--refine",
+    help='adds filter or field tags to the query. Constant value refseq[filter]. Follow constant value structure for your custom filters, begin with "AND".',
+    nargs="?",
+    const=" AND refseq[filter]",
+    type=str,
+    default="",
+)
+parser.add_argument(
+    "--curated",
+    help="only donwloads sequences with protein name included in Protein Feature. Just for protein searches",
+    action="store_true",
+)
+parser.add_argument(
+    "--retmax",
+    help="sets number of searched NCBI records. Default value equal to 200",
+    nargs="?",
+    const=200,
+    type=int,
+    default=200,
+)
 args = parser.parse_args()
 query_file = args.query
 email = args.email
@@ -26,29 +47,37 @@ nucleotide = args.nucleotide
 retmax = args.retmax
 refine = args.refine
 curated = args.curated
-db='protein'
+db = "protein"
 
 
 if nucleotide:
-    db='nucleotide'
+    db = "nucleotide"
 path = os.getcwd()
-query_lst = query_file.read().split('\n')
+query_lst = query_file.read().split("\n")
+
 
 def create_directory(directory):
-    directory = path +'/'+ directory
+    directory = path + "/" + directory
     if not os.path.isdir(directory):
         os.mkdir(directory)
     else:
-        print('WARNING. %s directory already exits. New data will be added to previous one.\n' %directory)
+        logger.warning(f"'{directory}' directory already exists. New data will be added to previous one.")
+
 
 def print_running_info(query, retmax):
-    print('INFO. Queries must follow gene name followed by filters between parentheses. If no filters type () after gene name. For nucletoide add --refine biomol_mrna[PROP] for proper transcrit download.\n')
-    print('INFO. Running %s query, %s data type, and retmax = %s. If using --curated note that the final number of sequences can be less than retmax.\n' %(query, db, retmax))
+    logger.info(
+        "Queries must follow gene name followed by filters between parentheses. If no filters type () after gene name. For nucletoide add --refine biomol_mrna[PROP] for proper transcrit download."
+    )
+    logger.info(
+        f"Running {query} query, {db} data type, and retmax = {retmax}. If using --curated note that the final number of sequences can be less than retmax."
+    )
+
 
 def get_assembly_summary(id_num):
     esummary_handle = Entrez.esummary(db=db, id=id_num, report="full")
     esummary_record = Entrez.read(esummary_handle, validate=False)
     return esummary_record
+
 
 def check_protein_in_all_values(features, protein):
     found = False
@@ -59,65 +88,68 @@ def check_protein_in_all_values(features, protein):
         #     for i in range(len(value)):
         #          get_all_values(value[i])
         else:
-            if re.search('product', str(value)):
-                value = value[0]['GBQualifier_value']
+            if re.search("product", str(value)):
+                value = value[0]["GBQualifier_value"]
                 if re.search(protein, value):
                     found = True
             if not found:
-                if re.search('note', str(value)):
-                    value = value[0]['GBQualifier_value']
+                if re.search("note", str(value)):
+                    value = value[0]["GBQualifier_value"]
                     if re.search(protein, value):
                         found = True
     return found
 
+
 def get_seqs_data(term, retmax, name):
     Entrez.email = email
-    handle = Entrez.esearch(db=db, term=term, retmax=retmax, sort='Significance')
+    handle = Entrez.esearch(db=db, term=term, retmax=retmax, sort="Significance")
     record = Entrez.read(handle)
     handle.close()
     rows = []
     try:
-        error_sentence=record['ErrorList']['PhraseNotFound']
-        print('ERROR. %s from %s not found and search result can be unpredictable. Check %s on "https://www.ncbi.nlm.nih.gov/" protein database or correct %s term.\n' %(error_sentence, term, term, error_sentence))
+        error_sentence = record["ErrorList"]["PhraseNotFound"]
+        logger.error(
+            f"{error_sentence} from {term} not found and search result can be unpredictable. Check {term} on 'https://www.ncbi.nlm.nih.gov/' protein database or correct {error_sentence} term."
+        )
     except KeyError:
-        ids = record['IdList']
+        ids = record["IdList"]
         for id_num in ids:
-            flag=True
-            if curated and db=='protein':
-                flag=False
-                handle= Entrez.efetch(db=db, id=id_num, retmode="xml")
+            flag = True
+            if curated and db == "protein":
+                flag = False
+                handle = Entrez.efetch(db=db, id=id_num, retmode="xml")
                 parser = Entrez.read(handle, validate=True, escape=False)
-                features = parser[0]['GBSeq_feature-table']
+                features = parser[0]["GBSeq_feature-table"]
                 for i in range(len(features)):
                     found = check_protein_in_all_values(features[i], name)
                     if found:
-                        flag=True
+                        flag = True
             if flag:
-                handle = Entrez.efetch(db=db, id=id_num,rettype='fasta', retmode="text")
+                handle = Entrez.efetch(db=db, id=id_num, rettype="fasta", retmode="text")
                 record = handle.read()
                 rows.append(record)
-    with open(path +'/'+ name+'_query_seqs.fas', 'w') as file:
+    with open(path + "/" + name + "_query_seqs.fas", "w") as file:
         for row in rows:
             file.write(row)
-            
-create_directory('../Data')
-path = path +'/../Data'
-create_directory('Query_seqs')
-path = path +'./Query_seqs'
+
+
+create_directory("../Data")
+path = path + "/../Data"
+create_directory("Query_seqs")
+path = path + "./Query_seqs"
 for query in query_lst:
-    if query=='':
+    if query == "":
         continue
     else:
-            term=query
-            if refine:
-                term = term+refine
-            a = re.search('(.*)?\(', term)
-            if a:
-                name = re.sub(' ', '_',a.group(1))
-                print_running_info(term, retmax)
-                get_seqs_data(term, retmax, name)
-            else:
-                print('WARNING. %s query is not correct. Must follow Gene name followed by filters between parentheses. If no filters type () after protein name. Skipt to next query.' %(query))
-
-
-
+        term = query
+        if refine:
+            term = term + refine
+        a = re.search("(.*)?\(", term)
+        if a:
+            name = re.sub(" ", "_", a.group(1))
+            print_running_info(term, retmax)
+            get_seqs_data(term, retmax, name)
+        else:
+            logger.warning(
+                f"{query} query is not correct. Must follow Gene name followed by filters between parentheses. If no filters type () after protein name. Skipt to next query."
+            )
