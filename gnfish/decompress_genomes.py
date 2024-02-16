@@ -15,11 +15,11 @@ import click
 import gzip
 import shutil
 
-##Arguments
+
 
 
 def select_files(directory):
-    return list_files.list_files_method(list_files, directory)
+    return list_files(directory)
 
 
 def decompress_genomes(directory):

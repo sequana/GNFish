@@ -4,10 +4,7 @@ from pprint import pprint as pp
 import glob
 
 
-
-class list_files():
-    @staticmethod
-    def list_files_method(self, path):
+def list_files(path):
 
         folders = []
         
