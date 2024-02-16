@@ -7,7 +7,6 @@ Created on Tue Apr 20 18:10:29 2021
 """
 import os
 import re
-import argparse
 from gnfish.class_list_files import list_files
 
 import click
@@ -15,7 +14,7 @@ import click
 import gzip
 import shutil
 
-
+from loguru import logger
 
 
 def select_files(directory):
@@ -34,11 +33,11 @@ def decompress_genomes(directory):
                         with open(file.group(1), "wb") as f_out:
                             shutil.copyfileobj(f_in, f_out)
                             found = True
-                            print("Decompressing " + folder[1][i] + " file.")
+                            logger.info(f"Decompressing {folder[1][i]} file.")
         except IndexError:
             continue
     if not found:
-        print("WARNING. No file decompressed.")
+        logger.warning("No file decompressed.")
 
 
 @click.command()
@@ -49,21 +48,6 @@ def decompress_genomes(directory):
 def main(directory, genomic, rna, protein):
     path = os.getcwd()
     data_type = [genomic, rna, protein]
-    # Process further based on the options provided
-
-    # def main():
-    #     parser = argparse.ArgumentParser(description="Decompress .gz files.")
-    #     parser.add_argument("--directory", help="sets path to custom folder", type=str)
-    #     parser.add_argument("--genomic", help="looks at ./Data/Genomic", nargs="?", const="genomic", type=str)
-    #     parser.add_argument("--rna", help="looks at ./Data/Rna", nargs="?", const="rna", type=str)
-    #     parser.add_argument("--protein", help="looks at ./Data/Protein", nargs="?", const="protein", type=str)
-    #     args = parser.parse_args()
-    #     genomic = args.genomic
-    #     rna = args.rna
-    #     protein = args.protein
-    #     directory = args.directory
-    #     path = os.getcwd()
-    #     data_type = [genomic, rna, protein]
 
     if directory is not None:
         decompress_genomes(directory + "/*")
