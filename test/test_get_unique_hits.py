@@ -15,6 +15,8 @@ def test_main(tmp_path):
         stderr=subprocess.PIPE,
         text=True,
     )
-    output_file = str(data_dir) + "/Bole_pseudo_genome_out_unique.tsv"
+    output_file = (
+        str(data_dir) + "/Boleophthalmus_pectinirostris_14439011_rna_out_unique.tsv"
+    )
     assert os.path.exists(output_file)
     assert os.path.getsize(output_file)

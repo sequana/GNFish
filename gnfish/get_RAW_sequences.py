@@ -2,101 +2,14 @@ import os
 import re
 import csv
 import argparse
-from class_list_files import list_files
-from Bio.Blast import NCBIWWW
-from Bio.Blast import NCBIXML
+from gnfish.class_list_files import list_files
 from Bio import Entrez
-from Bio import GenBank
 from Bio import SeqIO
-import subprocess
 from loguru import logger
 
 
-##Arguments
-parser = argparse.ArgumentParser(
-    description="Extracts RAW sequence from genome information. Implemented for Genus_species_assemblyID or GC[A,F]_ID. Both Blast output and genome data files must have the same structure."
-)
-parser.add_argument(
-    "--genomic",
-    help="extract unique hits from genomic data stored at Genomic folder or specify sequence type if using --directory argument.",
-    nargs="?",
-    const="genomic",
-    type=str,
-)
-parser.add_argument(
-    "--rna",
-    help="extract unique hits from rna data stored at Rna folder or specify sequence type if using --directory argument.",
-    nargs="?",
-    const="rna",
-    type=str,
-)
-parser.add_argument(
-    "--protein",
-    help="extract unique hits from protein data stored at Protein folder or specify sequence type if using --directory argument.",
-    nargs="?",
-    const="protein",
-    type=str,
-)
-parser.add_argument("--directory", help="path to custom folder", type=str)
-parser.add_argument(
-    "--blast_pattern",
-    help='custom pattern to find BLAST unique output files. Default "unique.tsv".',
-    nargs="?",
-    default="unique.tsv",
-    const="unique.tsv",
-    type=str,
-)
-parser.add_argument(
-    "--genome_pattern",
-    help='pattern to find genome files. Default ".f[a,n]a".',
-    nargs="?",
-    default=".f[a,n]a",
-    const=".f[a,n]a",
-    type=str,
-)
-parser.add_argument(
-    "--in_len",
-    help="Number of sites extracted upstream and downstream from the blast hit. Default 10000. A whole sequence of at least 20000 sites if exists",
-    nargs="?",
-    default=10000,
-    type=int,
-)
-parser.add_argument(
-    "--query_seqs",
-    help="Use it when you want to attach some query sequences according to BLAST results for future alignments",
-    action="store_true",
-)
-parser.add_argument(
-    "--query_seqs_num",
-    help="Maximum number of query sequences extracted. Use it when you want to attach some sequences to genomic sequences for future alignments. 5 by default",
-    nargs="?",
-    default=5,
-    type=int,
-)
-parser.add_argument(
-    "--email",
-    help="Mandatory when you want to download some sequences to complete the RAW files for future alignments. As in get_query_seqs. ",
-    nargs="?",
-    type=str,
-)
-
-args = parser.parse_args()
-genomic = args.genomic
-rna = args.rna
-protein = args.protein
-directory = args.directory
-blast_pattern = args.blast_pattern
-genome_pattern = args.genome_pattern
-in_len = args.in_len
-query_seqs = args.query_seqs
-query_seqs_num = args.query_seqs_num
-email = args.email
-path = os.getcwd()
-data_type_lst = [genomic, rna, protein]
-
-
 def select_files(path):
-    return list_files.list_files_method(list_files, path)
+    return list_files(path)
 
 
 def get_files(path, pattern):
@@ -117,7 +30,7 @@ def get_files(path, pattern):
     return files
 
 
-def open_CSV_file(csv_input_file):
+def open_CSV_file(csv_input_file, blast_pattern):
     try:
         with open(csv_input_file) as csv_file:
             csv_reader = csv.reader(csv_file, delimiter="\t")
@@ -138,7 +51,10 @@ def read_FASTA_entries(fasta_input_file):
 
 
 def read_FASTA_sequences(fasta_input_file):
-    return [[info, seq.replace("\n", "")] for info, ignore, seq in read_FASTA_entries(fasta_input_file)]
+    return [
+        [info, seq.replace("\n", "")]
+        for info, ignore, seq in read_FASTA_entries(fasta_input_file)
+    ]
 
 
 def read_FASTA_strings_2(fasta_input_file):
@@ -150,7 +66,10 @@ def read_FASTA_entries_2(fasta_input_file):
 
 
 def read_FASTA_sequences_2(fasta_input_file):
-    return [[info, seq.replace("\n", "")] for info, ignore, seq in read_FASTA_entries_2(fasta_input_file)]
+    return [
+        [info, seq.replace("\n", "")]
+        for info, ignore, seq in read_FASTA_entries_2(fasta_input_file)
+    ]
 
 
 def reverse_complement(DNA_string):
@@ -165,13 +84,15 @@ def reverse_complement(DNA_string):
     return reverse_string[::-1]
 
 
-def get_seqs_data(data_type, id_num):
+def get_seqs_data(data_type, id_num, email):
     Entrez.email = email
     if not re.search("protein", data_type):
         handle = Entrez.efetch(db="protein", id=id_num, rettype="gp", retmode="text")
         record = SeqIO.read(handle, "genbank")
         id_num = record.annotations.get("db_source")
-        handle = Entrez.efetch(db="nucleotide", id=id_num, rettype="fasta", retmode="text")
+        handle = Entrez.efetch(
+            db="nucleotide", id=id_num, rettype="fasta", retmode="text"
+        )
         record = handle.read()
     else:
         handle = Entrez.efetch(db="protein", id=id_num, rettype="fasta", retmode="text")
@@ -179,7 +100,18 @@ def get_seqs_data(data_type, id_num):
     return record
 
 
-def crossvalidate_sequences(blast_uni_lines_lst, blast_lines_lst, genome_file, data_type, blast_uni_file, blast_file):
+def crossvalidate_sequences(
+    blast_uni_lines_lst,
+    blast_lines_lst,
+    genome_file,
+    data_type,
+    blast_uni_file,
+    blast_file,
+    query_seqs,
+    query_seqs_num,
+    in_len,
+    email,
+):
     lines = []
     fasta_lines_lst = read_FASTA_sequences(genome_file)
     length = len(fasta_lines_lst)
@@ -207,7 +139,9 @@ def crossvalidate_sequences(blast_uni_lines_lst, blast_lines_lst, genome_file, d
                         if lower_bound < 0:
                             line_1 = reverse_complement(line[1][0:upper_bound])
                         else:
-                            line_1 = reverse_complement(line[1][lower_bound:upper_bound])
+                            line_1 = reverse_complement(
+                                line[1][lower_bound:upper_bound]
+                            )
                 ali_lines.append([line_0, line_1])
                 if query_seqs:
                     count = 0
@@ -217,7 +151,7 @@ def crossvalidate_sequences(blast_uni_lines_lst, blast_lines_lst, genome_file, d
                         if re.search(row[1], bl_row[1]) and count < query_seqs_num:
                             count += 1
                             bl_row_found = True
-                            db_seq = get_seqs_data(data_type, bl_row[0])
+                            db_seq = get_seqs_data(data_type, bl_row[0], email)
                             db_seq = read_FASTA_sequences_2(db_seq)
                             ali_lines.append(db_seq)
                     if not bl_row_found:
@@ -229,7 +163,16 @@ def crossvalidate_sequences(blast_uni_lines_lst, blast_lines_lst, genome_file, d
     return lines
 
 
-def generate_output_FASTA_file(path, data_type):
+def generate_output_FASTA_file(
+    path,
+    data_type,
+    blast_pattern,
+    genome_pattern,
+    query_seqs,
+    query_seqs_num,
+    in_len,
+    email,
+):
     count = 0
     blast_uni_files_lst = get_files(path, blast_pattern)
     genome_files_lst = get_files(path, genome_pattern)
@@ -239,22 +182,35 @@ def generate_output_FASTA_file(path, data_type):
         if not ID:
             ID = re.search("(GC[A,F]_[0-9].*?)_", blast_uni_file)
         if ID:
-            blast_uni_lines_lst = open_CSV_file(blast_uni_file)
+            blast_uni_lines_lst = open_CSV_file(blast_uni_file, blast_pattern)
             if blast_uni_lines_lst is not None:
                 found = False
                 blast_file = re.search("(.*?)_unique.tsv", blast_uni_file)
                 blast_file = blast_file.group(1) + ".tsv"
-                blast_lines_lst = open_CSV_file(blast_file)
+                blast_lines_lst = open_CSV_file(blast_file, blast_pattern)
                 for genome_file in genome_files_lst:
                     if re.search(ID.group(1), genome_file):
                         found = True
                         output_lines_lst = crossvalidate_sequences(
-                            blast_uni_lines_lst, blast_lines_lst, genome_file, data_type, blast_uni_file, blast_file
+                            blast_uni_lines_lst,
+                            blast_lines_lst,
+                            genome_file,
+                            data_type,
+                            blast_uni_file,
+                            blast_file,
+                            query_seqs,
+                            query_seqs_num,
+                            in_len,
+                            email,
                         )
                         output_file = re.search("(.*?)" + genome_pattern, genome_file)
                         for output_lines in output_lines_lst:
                             with open(
-                                output_file.group(1) + "_" + output_lines[1] + "_extraction_RAW.fas", "w"
+                                output_file.group(1)
+                                + "_"
+                                + output_lines[1]
+                                + "_extraction_RAW.fas",
+                                "w",
                             ) as file:
                                 first = True
                                 for line in output_lines[0]:
@@ -277,21 +233,122 @@ def generate_output_FASTA_file(path, data_type):
             )
 
 
-if directory is not None:
-    found = False
-    for data_type in data_type_lst:
-        if data_type is not None:
-            found = True
-            logger.info(" Running directory and %s argument.\n" % data_type)
-            generate_output_FASTA_file(path + "/../Data/" + data_type.capitalize() + "/*", data_type)
-    if not found:
-        logger.error(". You must use genomic, rna or protein arguments.")
-else:
-    found = False
-    for data_type in data_type_lst:
-        if data_type is not None:
-            found = True
-            logger.info(f"Running {data_type} argument.")
-            generate_output_FASTA_file(path + "/../Data/" + data_type.capitalize() + "/*", data_type)
-    if not found:
-        logger.error(f"You must use genomic, rna, protein arguments.")
+def main():
+    # Arguments
+    parser = argparse.ArgumentParser(
+        description="Extracts RAW sequence from genome information. Implemented for Genus_species_assemblyID or GC[A,F]_ID. Both Blast output and genome data files must have the same structure."
+    )
+    parser.add_argument(
+        "--genomic",
+        help="extract unique hits from genomic data stored at Genomic folder or specify sequence type if using --directory argument.",
+        nargs="?",
+        const="genomic",
+        type=str,
+    )
+    parser.add_argument(
+        "--rna",
+        help="extract unique hits from rna data stored at Rna folder or specify sequence type if using --directory argument.",
+        nargs="?",
+        const="rna",
+        type=str,
+    )
+    parser.add_argument(
+        "--protein",
+        help="extract unique hits from protein data stored at Protein folder or specify sequence type if using --directory argument.",
+        nargs="?",
+        const="protein",
+        type=str,
+    )
+    parser.add_argument("--directory", help="path to custom folder", type=str)
+    parser.add_argument(
+        "--blast_pattern",
+        help='custom pattern to find BLAST unique output files. Default "unique.tsv".',
+        nargs="?",
+        default="unique.tsv",
+        const="unique.tsv",
+        type=str,
+    )
+    parser.add_argument(
+        "--genome_pattern",
+        help='pattern to find genome files. Default ".f[a,n]a".',
+        nargs="?",
+        default=".f[a,n]a",
+        const=".f[a,n]a",
+        type=str,
+    )
+    parser.add_argument(
+        "--in_len",
+        help="Number of sites extracted upstream and downstream from the blast hit. Default 10000. A whole sequence of at least 20000 sites if exists",
+        nargs="?",
+        default=10000,
+        type=int,
+    )
+    parser.add_argument(
+        "--query_seqs",
+        help="Use it when you want to attach some query sequences according to BLAST results for future alignments",
+        action="store_true",
+    )
+    parser.add_argument(
+        "--query_seqs_num",
+        help="Maximum number of query sequences extracted. Use it when you want to attach some sequences to genomic sequences for future alignments. 5 by default",
+        nargs="?",
+        default=5,
+        type=int,
+    )
+    parser.add_argument(
+        "--email",
+        help="Mandatory when you want to download some sequences to complete the RAW files for future alignments. As in get_query_seqs. ",
+        nargs="?",
+        type=str,
+    )
+
+    args = parser.parse_args()
+    genomic = args.genomic
+    rna = args.rna
+    protein = args.protein
+    directory = args.directory
+    blast_pattern = args.blast_pattern
+    genome_pattern = args.genome_pattern
+    in_len = args.in_len
+    query_seqs = args.query_seqs
+    query_seqs_num = args.query_seqs_num
+    email = args.email
+    path = os.getcwd()
+    data_type_lst = [genomic, rna, protein]
+
+    if directory is not None:
+        found = False
+        for data_type in data_type_lst:
+            if data_type is not None:
+                found = True
+                logger.info(" Running directory and %s argument.\n" % data_type)
+                generate_output_FASTA_file(
+                    path + "/" + directory + "*",
+                    data_type,
+                    blast_pattern,
+                    genome_pattern,
+                    query_seqs,
+                    query_seqs_num,
+                    in_len,
+                    email,
+                )
+        if not found:
+            logger.error(". You must use genomic, rna or protein arguments.")
+    else:
+        found = False
+        for data_type in data_type_lst:
+            if data_type is not None:
+                found = True
+                logger.info(f"Running {data_type} argument.")
+                generate_output_FASTA_file(
+                    path + "/../Data/" + data_type.capitalize() + "/*",
+                    data_type,
+                    blast_pattern,
+                    genome_pattern,
+                    query_seqs,
+                    query_seqs_num,
+                    in_len,
+                    email,
+                )
+        if not found:
+            logger.error(f"You must use genomic, rna, protein arguments.")
