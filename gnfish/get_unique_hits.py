@@ -7,56 +7,12 @@ Created on Thu Jun 17 09:56:24 2021
 """
 import os
 import sys
-import urllib
 import re
 import argparse
 import csv
-import subprocess
-from class_list_files import list_files
+from gnfish.class_list_files import list_files
 
 from loguru import logger
-
-##Arguments
-parser = argparse.ArgumentParser(description="Gets unique hits from BLAST output files based on genomes IDs.")
-parser.add_argument(
-    "--genomic",
-    help="extracts unique hits from genomic data stored at Genomic folder. Use directory for custom folder.",
-    nargs="?",
-    const="genomic",
-    type=str,
-)
-parser.add_argument(
-    "--rna",
-    help="extracts unique hits from rna data stored at Rna folder. Use directory for custom folder.",
-    nargs="?",
-    const="rna",
-    type=str,
-)
-parser.add_argument(
-    "--protein",
-    help="extracts unique hits from protein data stored at Protein folder. Use directory for custom folder.",
-    nargs="?",
-    const="protein",
-    type=str,
-)
-parser.add_argument("--directory", help="sets path to custom folder", nargs="?", type=str)
-parser.add_argument(
-    "--pattern",
-    help='custom pattern to find Blast output files. Default ".tsv".',
-    nargs="?",
-    default=".tsv",
-    const=".tsv",
-    type=str,
-)
-args = parser.parse_args()
-genomic = args.genomic
-rna = args.rna
-protein = args.protein
-directory = args.directory
-pattern = args.pattern
-get_unique = args.get_unique
-path = os.getcwd()
-data_type_lst = [genomic, rna, protein]
 
 
 def open_TSV_file(input_file):
@@ -67,10 +23,10 @@ def open_TSV_file(input_file):
 
 
 def select_files(path):
-    return list_files.list_files_method(list_files, path)
+    return list_files(path)
 
 
-def get_files(path):
+def get_files(path, pattern):
     files = []
     found = False
     for folder in select_files(path):
@@ -89,7 +45,9 @@ def get_files(path):
         except IndexError:
             continue
     if not found:
-        logger.error(f"No file. Try another directory or pattern. Current pattern extension is {pattern}")
+        logger.error(
+            f"No file. Try another directory or pattern. Current pattern extension is {pattern}"
+        )
         sys.exit()
     else:
         return files
@@ -111,8 +69,8 @@ def get_unique_hits(rows):
     return new_rows
 
 
-def generate_output_file(path):
-    tsv_file_lst = get_files(path)
+def generate_output_file(path, pattern):
+    tsv_file_lst = get_files(path, pattern)
     for tsv_file in tsv_file_lst:
         new_rows = []
         exten = ""
@@ -139,15 +97,65 @@ def generate_output_file(path):
                 file.write("\n")
 
 
-if directory is not None:
-    logger.info("Running directory argument. Blast files must have .tsv extension.")
-    generate_output_file(directory + "*")
-else:
-    found = False
-    for data_type in data_type_lst:
-        if data_type is not None:
-            found = True
-            logger.info(f"Running {data_type} argument. Blast files must have {pattern} extension.")
-            generate_output_file(path + "/../Data/" + data_type.capitalize() + "/*")
-    if not found:
-        logger.error("You must use genomic, rna, protein or directory arguments.")
+def main():
+    # Arguments
+    parser = argparse.ArgumentParser(
+        description="Gets unique hits from BLAST output files based on genomes IDs."
+    )
+    parser.add_argument(
+        "--genomic",
+        help="extracts unique hits from genomic data stored at Genomic folder. Use directory for custom folder.",
+        nargs="?",
+        const="genomic",
+        type=str,
+    )
+    parser.add_argument(
+        "--rna",
+        help="extracts unique hits from rna data stored at Rna folder. Use directory for custom folder.",
+        nargs="?",
+        const="rna",
+        type=str,
+    )
+    parser.add_argument(
+        "--protein",
+        help="extracts unique hits from protein data stored at Protein folder. Use directory for custom folder.",
+        nargs="?",
+        const="protein",
+        type=str,
+    )
+    parser.add_argument(
+        "--directory", help="sets path to custom folder", nargs="?", type=str
+    )
+    parser.add_argument(
+        "--pattern",
+        help='custom pattern to find Blast output files. Default ".tsv".',
+        nargs="?",
+        default=".tsv",
+        const=".tsv",
+        type=str,
+    )
+    args = parser.parse_args()
+    genomic = args.genomic
+    rna = args.rna
+    protein = args.protein
+    directory = args.directory
+    pattern = args.pattern
+    path = os.getcwd()
+    data_type_lst = [genomic, rna, protein]
+
+    if directory is not None:
+        logger.info("Running directory argument. Blast files must have .tsv extension.")
+        generate_output_file(directory + "*", pattern)
+    else:
+        found = False
+        for data_type in data_type_lst:
+            if data_type is not None:
+                found = True
+                logger.info(
+                    f"Running {data_type} argument. Blast files must have {pattern} extension."
+                )
+                generate_output_file(
+                    path + "/../Data/" + data_type.capitalize() + "/*", pattern
+                )
+        if not found:
+            logger.error("You must use genomic, rna, protein or directory arguments.")
