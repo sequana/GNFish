@@ -24,7 +24,6 @@ def select_files(directory):
 def decompress_genomes(directory):
     found = False
     for folder in select_files(directory):
-        # print(folder[1])
         try:
             for i in range(len(folder[1])):
                 file = re.search("(.*).gz", folder[1][i])
