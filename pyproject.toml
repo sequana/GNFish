@@ -21,3 +21,4 @@ build-backend = "poetry.core.masonry.api"
 [tool.poetry.scripts]
 decompress_genomes = 'gnfish.decompress_genomes:main'
 get_genomes = 'gnfish.get_genomes:main'
+blast = 'gnfish.blast:main'
