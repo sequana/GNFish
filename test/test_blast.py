@@ -9,14 +9,12 @@ def test_main(tmp_path):
     data_dir = tmp_path / dir_to_copy
     shutil.copytree(Path(__file__).parent / dir_to_copy, data_dir)
     result = subprocess.run(
-        f"get_unique_hits --directory {data_dir}",
+        f"blast '' {data_dir}/protein_query_seqs.fas prot --directory {data_dir} --genomic",
         shell=True,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
         text=True,
     )
-    output_file = (
-        str(data_dir) + "/Boleophthalmus_pectinirostris_14439011_rna_out_unique.tsv"
-    )
+    output_file = str(data_dir) + "/Boleophthalmus_pectinirostris_14439011_rna_out.tsv"
     assert os.path.exists(output_file)
     assert os.path.getsize(output_file)
