@@ -4,23 +4,22 @@ Program to align sequences using MAFFT tool.
 """
 
 import os
-import sys
-import urllib
 import re
 import argparse
-import csv
 import subprocess
-from Bio.Align.Applications import MafftCommandline
-from class_list_files import list_files
+from gnfish.utils import list_files
 
 from loguru import logger
 
-##Arguments
+import pdb
+import pytest
+
+# Arguments
 parser = argparse.ArgumentParser(
     description="Aligns files enclosed at Data folder or your custom file. More info at README.md file"
 )
 parser.add_argument(
-    "--genome",
+    "--genomic",
     help="extracts unique hits from whole genome data stored at Genomic folder or specify genome type if using --directory argument.",
     nargs="?",
     const="genomic",
@@ -43,10 +42,10 @@ parser.add_argument(
 parser.add_argument("--directory", help="sets path to custom folder", type=str)
 parser.add_argument(
     "--algorithm",
-    help="sets MAFFT algorithm. Default mafft (automatic)",
+    help="sets MAFFT algorithm. Default --auto (automatic)",
     nargs="?",
-    default="mafft",
-    const="mafft",
+    default="--auto",
+    const="--auto",
     type=str,
 )
 parser.add_argument(
@@ -69,7 +68,7 @@ data_type_lst = [genomic, rna, protein]
 
 
 def select_files(path):
-    return list_files.list_files_method(list_files, path)
+    return list_files(path)
 
 
 def get_files(path):
@@ -94,12 +93,6 @@ def get_files(path):
     return files
 
 
-def write_mafft_alignment_fasta_file(input_file):
-    mafft_cline = MafftCommandline("/usr/local/bin/" + algorithm, input=input_file)
-    stdout, stderr = mafft_cline()
-    return stdout
-
-
 def read_FASTA_strings(fasta_input_file):
     nu_search = re.search("\.fas", fasta_input_file)
     if not nu_search:
@@ -114,30 +107,40 @@ def read_FASTA_entries(fasta_input_file):
 
 
 def read_FASTA_sequences(fasta_input_file):
-    return [[info, seq.replace("\n", "")] for info, ignore, seq in read_FASTA_entries(fasta_input_file)]
+    return [
+        [info, seq.replace("\n", "")]
+        for info, ignore, seq in read_FASTA_entries(fasta_input_file)
+    ]
 
 
 if directory is not None:
     found = True
     logger.info("Running directory argument.")
-    file_lst = get_files(path)
+    file_lst = get_files(directory + "/*")
     for infile in file_lst:
-        out = write_mafft_alignment_fasta_file(infile)
+        # out = write_mafft_alignment_fasta_file(infile)
+        mafft_command = ["/usr/bin/mafft", algorithm, infile]
         output_file = re.search("(.*?)\.fas", infile)
-        with open(output_file.group(1) + "_ali.fas") as file:
-            file.write(out)
-else:
-    found = False
-    for data_type in data_type_lst:
-        if data_type is not None:
-            found = True
-            logger.info(f"Running data type {data_type} argument.")
-            file_lst = get_files(path + "/../Data/" + data_type.capitalize() + "/*")
-            for infile in file_lst:
-                out = write_mafft_alignment_fasta_file(infile)
-                output_file = re.search("(.*?)\.fas", infile)
-                logger.debug(f"{output_file.group(1)}")
-                with open(output_file.group(1) + "_ali.fas", "w") as file:
-                    file.write(out)
+        with open(output_file.group(1) + "_ali.fas", "w") as output:
+            subprocess.run(mafft_command, stdout=output, text=True)
+
+        #     file.write(out)
+    # else:
+    #     found = False
+    #     for data_type in data_type_lst:
+    #         if data_type is not None:
+    #             found = True
+    #             logger.info(f"Running data type {data_type} argument.")
+    #             file_lst = get_files(path + "/../Data/" + data_type.capitalize() + "/*")
+    #             for infile in file_lst:
+    #                 out = write_mafft_alignment_fasta_file(infile)
+    #                 output_file = re.search("(.*?)\.fas", infile)
+    #                 logger.debug(f"{output_file.group(1)}")
+    #                 with open(output_file.group(1) + "_ali.fas", "w") as file:
+    #                     file.write(out)
     if not found:
         logger.error("You must use genomic, rna or protein arguments.")
+
+
+def main():
+    return ""
