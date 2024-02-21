@@ -9,7 +9,7 @@ def test_main(tmp_path):
     data_dir = tmp_path / dir_to_copy
     shutil.copytree(Path(__file__).parent / dir_to_copy, data_dir)
     result = subprocess.run(
-        f"get_raw_sequences --directory {data_dir}",
+        f"get_raw_sequences --directory {data_dir} --rna",
         shell=True,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,

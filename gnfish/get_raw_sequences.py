@@ -319,7 +319,7 @@ def main():
                 found = True
                 logger.info(" Running directory and %s argument.\n" % data_type)
                 generate_output_FASTA_file(
-                    path + "/" + directory + "*",
+                    directory + "*",
                     data_type,
                     blast_pattern,
                     genome_pattern,

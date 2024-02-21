@@ -1,5 +1,4 @@
 import subprocess
-import gnfish.decompress_genomes as dg
 import shutil
 from pathlib import Path
 

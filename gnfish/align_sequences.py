@@ -110,7 +110,7 @@ def main():
     if directory is not None:
         found = True
         logger.info("Running directory argument.")
-        file_lst = get_files(directory + "/*")
+        file_lst = get_files(directory + "/*", pattern)
         for infile in file_lst:
             # out = write_mafft_alignment_fasta_file(infile)
             mafft_command = ["/usr/bin/mafft", algorithm, infile]

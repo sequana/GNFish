@@ -10,7 +10,7 @@ def test_main(tmp_path):
     data_dir = tmp_path / dir_to_copy
     shutil.copytree(Path(__file__).parent / dir_to_copy, data_dir)
     subprocess.run(
-        f"get_combined_seqs 'Bole_AQP11_12' {data_dir}/ --directory {data_dir} --pattern 'RAW_translated.fas'",
+        f"get_combined_seqs 'Bole_AQP11_12' {data_dir}/ --directory {data_dir} --pattern 'RAW_3_translated.fas'",
         shell=True,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
