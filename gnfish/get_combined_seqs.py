@@ -14,13 +14,9 @@ from gnfish.utils import list_files
 from loguru import logger
 
 
-def select_files(path):
-    return list_files(path)
-
-
 def get_files(path, pattern):
     files = []
-    for folder in select_files(path):
+    for folder in list_files(path):
         try:
             found = False
             for i in range(len(folder[1])):
