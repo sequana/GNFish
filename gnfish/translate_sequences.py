@@ -9,7 +9,7 @@ Created on Tue Dec 21 13:10:39 2021
 
 import os
 import re
-import argparse
+import click
 from gnfish.utils import list_files
 
 from loguru import logger
@@ -93,55 +93,44 @@ def translate_sequences_all_sequences(
                 file.write("\n")
 
 
-def main():
-    # Arguments
-    parser = argparse.ArgumentParser(description="Translates sequences.")
-    parser.add_argument(
-        "--genome",
-        help="extract unique hits from genome data stored at genome folder or specify genome type if using --directory argument.",
-        nargs="?",
-        const="genome",
-        type=str,
-    )
-    parser.add_argument(
-        "--rna",
-        help="extract unique hits from rna data stored at Rna folder or specify genome type if using --directory argument.",
-        nargs="?",
-        const="rna",
-        type=str,
-    )
-    parser.add_argument("--directory", help="path to custom folder", type=str)
-    parser.add_argument(
-        "--genetic_code",
-        help="Default 1 -Standard. Look below for the number of other genetic codes.",
-        nargs="?",
-        type=int,
-        default=1,
-    )
-    parser.add_argument(
-        "--pattern",
-        help='custom pattern to find files for translation. Defaul "_final.fas" and "RAW.fas" as backup.',
-        nargs="?",
-        default="final.fas",
-        const="final.fas",
-        type=str,
-    )
-    parser.add_argument(
-        "--out_exten",
-        help='extension of the output file. Default "_translated.fas".',
-        nargs="?",
-        type=str,
-        default="_translated.fas",
-    )
-    args = parser.parse_args()
-    genome = args.genome
-    rna = args.rna
-    directory = args.directory
-    genetic_code = args.genetic_code
-    pattern = args.pattern
-    out_exten = args.out_exten
+@click.command()
+@click.option(
+    "--genomic",
+    help="Extract unique hits from genome data stored at genome folder or specify genome type if using --directory argument.",
+    type=str,
+    is_flag=True,
+    flag_value="genomic",
+)
+@click.option(
+    "--rna",
+    help="Extract unique hits from rna data stored at Rna folder or specify genome type if using --directory argument.",
+    type=str,
+    is_flag=True,
+    flag_value="rna",
+)
+@click.option("--directory", help="Path to custom folder", type=str)
+@click.option(
+    "--genetic_code",
+    help="Default 1 - Standard. Look below for the number of other genetic codes.",
+    type=int,
+    default=1,
+)
+@click.option(
+    "--pattern",
+    help='Custom pattern to find files for translation. Default "_final.fas" and "RAW.fas" as backup.',
+    type=str,
+    default="final.fas",
+)
+@click.option(
+    "--out_exten",
+    help='Extension of the output file. Default "_translated.fas".',
+    type=str,
+    default="_translated.fas",
+)
+def main(genomic, rna, directory, genetic_code, pattern, out_exten):
+    """Translates sequences."""
     path = os.getcwd()
-    data_type_lst = [genome, rna]
+    data_type_lst = [genomic, rna]
 
     codes = {
         1:
