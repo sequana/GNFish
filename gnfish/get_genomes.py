@@ -5,7 +5,7 @@ import os
 import urllib
 from Bio import Entrez
 import re
-import argparse
+import click
 import csv
 
 from loguru import logger
@@ -165,64 +165,54 @@ def manage_create_directory(path):
     return path
 
 
-def main():
-    # Arguments
-    parser = argparse.ArgumentParser(
-        description="Downloads genome, transcript and protein information from NCBI database."
-    )
-    parser.add_argument("email", help="mandatory e-mail for NCBI searches", type=str)
-    parser.add_argument(
-        "query", help="file with the queries", type=argparse.FileType("r")
-    )
-    parser.add_argument(
-        "--genomic", help="downloads whole genomic data", action="store_true"
-    )
-    parser.add_argument(
-        "--rna", help="downloads protein annotation data", action="store_true"
-    )
-    parser.add_argument(
-        "--protein", help="downloads protein annotation data", action="store_true"
-    )
-    parser.add_argument(
-        "--exclusive",
-        help="download just protein or rna annotation data if available.",
-        action="store_true",
-    )
-    parser.add_argument(
-        "--retmax",
-        help="number of NCBI records reported for every query. Default value equal to 200",
-        nargs="?",
-        const=200,
-        type=int,
-        default=200,
-    )
-    parser.add_argument(
-        "--refine",
-        help='adds filter or field information to all queries. Constant value AND (latest[filter] AND "representative genome"[filter] AND all[filter] NOT anomalous[filter]). Follow constant value structure for your custom refine.',
-        nargs="?",
-        const='AND (latest[filter] AND "representative genome"[filter] AND all[filter] NOT anomalous[filter])',
-        type=str,
-        default="",
-    )
-    args = parser.parse_args()
-    query_file = args.query
-    genomic = args.genomic
-    rna = args.rna
-    protein = args.protein
-    email = args.email
-    exclusive = args.exclusive
-    retmax = args.retmax
-    refine = args.refine
+@click.command()
+@click.argument(
+    "email",
+    type=str,
+    required=True,
+)
+@click.argument(
+    "query",
+    type=click.File("r"),
+    required=True,
+)
+@click.option("--genomic", is_flag=True, help="Downloads whole genomic data.")
+@click.option("--rna", is_flag=True, help="Downloads protein annotation data.")
+@click.option("--protein", is_flag=True, help="Downloads protein annotation data.")
+@click.option(
+    "--exclusive",
+    is_flag=True,
+    help="Download just protein or RNA annotation data if available.",
+)
+@click.option(
+    "--retmax",
+    type=int,
+    default=200,
+    help="Number of NCBI records reported for every query. Default value is 200.",
+)
+@click.option(
+    "--refine",
+    type=str,
+    default="",
+    is_flag=False,
+    flag_value="AND (latest[filter] AND 'representative genome'[filter] AND all[filter] NOT anomalous[filter])",
+    help='Adds filter or field information to all queries. Constant value "AND (latest[filter] AND "representative genome"[filter] AND all[filter] NOT anomalous[filter])". Follow constant value structure for your custom refine.',
+)
+def main(email, query, genomic, rna, protein, exclusive, retmax, refine):
+    """Download genome, transcript, and protein data from NCBI database.
+
+        EMAIL your email for connecting to NCBI database.
+
+    QUERY path to the file with your queries.
+    """
+    params_to_log = {key: value for key, value in locals().items() if value is not None}
+    print_running_info(params_to_log)
     data_lst = []
     db = "assembly"
     path = manage_create_directory(os.getcwd())
     tsv_output_file = path + "/downloaded_genomes_log.tsv"
     rows = []
-    query_lst = query_file.read().split("\n")
-
-    for arg in args.__dict__:
-        if args.__dict__[arg]:
-            print_running_info(arg)
+    query_lst = query.read().split("\n")
 
     # Checks data type
     if genomic == rna == protein is False:
