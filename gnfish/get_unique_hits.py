@@ -8,7 +8,7 @@ Created on Thu Jun 17 09:56:24 2021
 import os
 import sys
 import re
-import argparse
+import click
 import csv
 from gnfish.utils import list_files
 
@@ -93,49 +93,37 @@ def generate_output_file(path, pattern):
                 file.write("\n")
 
 
-def main():
-    # Arguments
-    parser = argparse.ArgumentParser(
-        description="Gets unique hits from BLAST output files based on genomes IDs."
-    )
-    parser.add_argument(
-        "--genomic",
-        help="extracts unique hits from genomic data stored at Genomic folder. Use directory for custom folder.",
-        nargs="?",
-        const="genomic",
-        type=str,
-    )
-    parser.add_argument(
-        "--rna",
-        help="extracts unique hits from rna data stored at Rna folder. Use directory for custom folder.",
-        nargs="?",
-        const="rna",
-        type=str,
-    )
-    parser.add_argument(
-        "--protein",
-        help="extracts unique hits from protein data stored at Protein folder. Use directory for custom folder.",
-        nargs="?",
-        const="protein",
-        type=str,
-    )
-    parser.add_argument(
-        "--directory", help="sets path to custom folder", nargs="?", type=str
-    )
-    parser.add_argument(
-        "--pattern",
-        help='custom pattern to find Blast output files. Default ".tsv".',
-        nargs="?",
-        default=".tsv",
-        const=".tsv",
-        type=str,
-    )
-    args = parser.parse_args()
-    genomic = args.genomic
-    rna = args.rna
-    protein = args.protein
-    directory = args.directory
-    pattern = args.pattern
+@click.command()
+@click.option(
+    "--genomic",
+    help="Extracts unique hits from genomic data stored at Genomic folder. Use --directory for a custom folder.",
+    is_flag=True,
+    flag_value="genomic",
+    type=str,
+)
+@click.option(
+    "--rna",
+    help="Extracts unique hits from rna data stored at Rna folder. Use --directory for a custom folder.",
+    is_flag=True,
+    flag_value="rna",
+    type=str,
+)
+@click.option(
+    "--protein",
+    help="Extracts unique hits from protein data stored at Protein folder. Use --directory for a custom folder.",
+    is_flag=True,
+    flag_value="protein",
+    type=str,
+)
+@click.option("--directory", help="Sets path to a custom folder", type=str)
+@click.option(
+    "--pattern",
+    help='Custom pattern to find Blast output files. Default ".tsv".',
+    default=".tsv",
+    type=str,
+)
+def main(genomic, rna, protein, directory, pattern):
+    """Gets unique hits from BLAST output files based on genomes IDs."""
     path = os.getcwd()
     data_type_lst = [genomic, rna, protein]
 

@@ -83,21 +83,21 @@ def blast(path, db_type, blast_path, query_type, query_file, out_exten, outfmt, 
     "--genomic",
     type=str,
     help="blast against genomic data stored at Genomic folder. Use directory for custom folder.",
-    is_flag=False,
+    is_flag=True,
     flag_value="genomic",
 )
 @click.option(
     "--rna",
     type=str,
     help="blast against rna data stored at Rna folder. Use directory for custom folder.",
-    is_flag=False,
+    is_flag=True,
     flag_value="rna",
 )
 @click.option(
     "--protein",
     type=str,
     help="blast against protein data stored at Protein folder. Use directory for custom folder.",
-    is_flag=False,
+    is_flag=True,
     flag_value="protein",
 )
 @click.option(
