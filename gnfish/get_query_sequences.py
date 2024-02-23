@@ -4,7 +4,7 @@
 import os
 from Bio import Entrez
 import re
-import argparse
+import click
 from loguru import logger
 
 
@@ -27,20 +27,11 @@ def print_running_info(query, retmax, db):
     )
 
 
-# def get_assembly_summary(id_num, db):
-#     esummary_handle = Entrez.esummary(db=db, id=id_num, report="full")
-#     esummary_record = Entrez.read(esummary_handle, validate=False)
-#     return esummary_record
-
-
 def check_protein_in_all_values(features, protein):
     found = False
     for key, value in features.items():
         if type(value) is dict:
             check_protein_in_all_values(features, protein)
-        # elif type(value) is list:
-        #     for i in range(len(value)):
-        #          get_all_values(value[i])
         else:
             if re.search("product", str(value)):
                 value = value[0]["GBQualifier_value"]
@@ -89,54 +80,44 @@ def get_seqs_data(term, retmax, name, email, db, curated, path):
             file.write(row)
 
 
-def main():
-    # Arguments
-    parser = argparse.ArgumentParser(
-        description="Downloads a set of protein for query for BLAST searches. Alternatively you can dowload nucleotides sequences using IDs"
-    )
-    parser.add_argument(
-        "email", help="sets mandatory e-mail for NCBI searches", type=str
-    )
-    parser.add_argument(
-        "query", help="sets file path with the query", type=argparse.FileType("r")
-    )
-    parser.add_argument(
-        "--nucleotide", help="for nucleotide downloading", action="store_true"
-    )
-    parser.add_argument(
-        "--refine",
-        help='adds filter or field tags to the query. Constant value refseq[filter]. Follow constant value structure for your custom filters, begin with "AND".',
-        nargs="?",
-        const=" AND refseq[filter]",
-        type=str,
-        default="",
-    )
-    parser.add_argument(
-        "--curated",
-        help="only donwloads sequences with protein name included in Protein Feature. Just for protein searches",
-        action="store_true",
-    )
-    parser.add_argument(
-        "--retmax",
-        help="sets number of searched NCBI records. Default value equal to 200",
-        nargs="?",
-        const=200,
-        type=int,
-        default=200,
-    )
-    args = parser.parse_args()
-    query_file = args.query
-    email = args.email
-    nucleotide = args.nucleotide
-    retmax = args.retmax
-    refine = args.refine
-    curated = args.curated
+@click.command()
+@click.argument("email", type=str, required=True)
+@click.argument("query", type=click.File("r"), required=True)
+@click.option("--nucleotide", help="for nucleotide downloading", is_flag=True)
+@click.option(
+    "--refine",
+    help='adds filter or field tags to the query. Constant value refseq[filter]. Follow constant value structure for your custom filters, begin with "AND".',
+    type=str,
+    default="",
+    is_flag=False,
+    flag_value="refseq[filter]",
+)
+@click.option(
+    "--curated",
+    help="only downloads sequences with protein name included in Protein Feature. Just for protein searches",
+    is_flag=True,
+)
+@click.option(
+    "--retmax",
+    help="sets number of searched NCBI records. Default value equal to 200",
+    type=int,
+    default=200,
+    is_flag=False,
+    flag_value=200,
+)
+def main(email, query, nucleotide, refine, curated, retmax):
+    """Download a set of protein for query for BLAST searches. Alternatively you can download nucleotide sequences using IDs.
+        EMAIL your email for connecting to NCBI database.
+
+    QUERY path to the file with your queries.
+
+    """
     db = "protein"
 
     if nucleotide:
         db = "nucleotide"
     path = os.getcwd()
-    query_lst = query_file.read().split("\n")
+    query_lst = query.read().split("\n")
 
     create_directory("../Data", path)
     path = path + "/../Data"
@@ -148,7 +129,7 @@ def main():
         else:
             term = query
             if refine:
-                term = term + refine
+                term = term + " " + refine
             a = re.search("(.*)?\(", term)
             if a:
                 name = re.sub(" ", "_", a.group(1))
