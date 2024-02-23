@@ -2,19 +2,15 @@ import os
 import re
 import csv
 import argparse
-from gnfish.class_list_files import list_files
+from gnfish.utils import list_files
 from Bio import Entrez
 from Bio import SeqIO
 from loguru import logger
 
 
-def select_files(path):
-    return list_files(path)
-
-
 def get_files(path, pattern):
     files = []
-    for folder in select_files(path):
+    for folder in list_files(path):
         try:
             for i in range(len(folder[1])):
                 file = re.search("(.*)" + pattern + ".*", folder[1][i])
@@ -323,7 +319,7 @@ def main():
                 found = True
                 logger.info(" Running directory and %s argument.\n" % data_type)
                 generate_output_FASTA_file(
-                    path + "/" + directory + "*",
+                    directory + "*",
                     data_type,
                     blast_pattern,
                     genome_pattern,

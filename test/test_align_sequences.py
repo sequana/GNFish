@@ -9,12 +9,12 @@ def test_main(tmp_path):
     data_dir = tmp_path / dir_to_copy
     shutil.copytree(Path(__file__).parent / dir_to_copy, data_dir)
     result = subprocess.run(
-        f"blast '' {data_dir}/protein_query_seqs.fas prot --directory {data_dir} --rna",
+        f"align_sequences --directory {data_dir} --pattern 'combined_2'",
         shell=True,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
         text=True,
     )
-    output_file = str(data_dir) + "/Boleophthalmus_pectinirostris_14439011_rna_out.tsv"
+    output_file = str(data_dir) + "/Bole_AQP11_12_all_combined_2_ali.fas"
     assert os.path.exists(output_file)
     assert os.path.getsize(output_file)

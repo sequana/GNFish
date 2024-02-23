@@ -1,0 +1,1 @@
+aquaporin(AND refseq[filter] AND Boleophthalmus[Organism])

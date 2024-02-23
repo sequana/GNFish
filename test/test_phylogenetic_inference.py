@@ -9,12 +9,12 @@ def test_main(tmp_path):
     data_dir = tmp_path / dir_to_copy
     shutil.copytree(Path(__file__).parent / dir_to_copy, data_dir)
     result = subprocess.run(
-        f"blast '' {data_dir}/protein_query_seqs.fas prot --directory {data_dir} --rna",
+        f"phylogenetic_inference '' {data_dir}/AQP16_8_ali_extract.fasta",
         shell=True,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
         text=True,
     )
-    output_file = str(data_dir) + "/Boleophthalmus_pectinirostris_14439011_rna_out.tsv"
+    output_file = str(data_dir) + "/AQP16_8_ali_extract.fasta_TEST_UFBS_alrt.treefile"
     assert os.path.exists(output_file)
     assert os.path.getsize(output_file)

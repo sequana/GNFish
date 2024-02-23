@@ -7,7 +7,7 @@ Created on Tue Apr 20 18:10:29 2021
 """
 import os
 import re
-from gnfish.class_list_files import list_files
+from gnfish.utils import list_files
 
 import click
 
@@ -17,13 +17,9 @@ import shutil
 from loguru import logger
 
 
-def select_files(directory):
-    return list_files(directory)
-
-
 def decompress_genomes(directory):
     found = False
-    for folder in select_files(directory):
+    for folder in list_files(directory):
         try:
             for i in range(len(folder[1])):
                 file = re.search("(.*).gz", folder[1][i])

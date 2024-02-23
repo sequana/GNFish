@@ -10,19 +10,15 @@ import sys
 import re
 import argparse
 import subprocess
-from gnfish.class_list_files import list_files
+from gnfish.utils import list_files
 from loguru import logger
-
-
-def select_files(path):
-    return list_files(path)
 
 
 def get_files(path):
     files = set()
     out_files = {}
     found = False
-    for folder in select_files(path):
+    for folder in list_files(path):
         try:
             for i in range(len(folder[1])):
                 file = re.search("(((.*)\.f[a,n]a).*)", folder[1][i])
