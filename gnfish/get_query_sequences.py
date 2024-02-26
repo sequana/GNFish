@@ -81,13 +81,13 @@ def get_seqs_data(term, retmax, name, email, db, curated, path):
 
 
 @click.command()
-@click.argument("email", type=str, required=True)
+@click.argument("email", type=click.STRING, required=True)
 @click.argument("query", type=click.File("r"), required=True)
 @click.option("--nucleotide", help="for nucleotide downloading", is_flag=True)
 @click.option(
     "--refine",
     help='adds filter or field tags to the query. Constant value refseq[filter]. Follow constant value structure for your custom filters, begin with "AND".',
-    type=str,
+    type=click.STRING,
     default="",
     is_flag=False,
     flag_value="refseq[filter]",
@@ -100,7 +100,7 @@ def get_seqs_data(term, retmax, name, email, db, curated, path):
 @click.option(
     "--retmax",
     help="sets number of searched NCBI records. Default value equal to 200",
-    type=int,
+    type=click.INT,
     default=200,
     is_flag=False,
     flag_value=200,

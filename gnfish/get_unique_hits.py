@@ -99,31 +99,31 @@ def generate_output_file(path, pattern):
     help="Extracts unique hits from genomic data stored at Genomic folder. Use --directory for a custom folder.",
     is_flag=True,
     flag_value="genomic",
-    type=str,
+    type=click.STRING,
 )
 @click.option(
     "--rna",
     help="Extracts unique hits from rna data stored at Rna folder. Use --directory for a custom folder.",
     is_flag=True,
     flag_value="rna",
-    type=str,
+    type=click.STRING,
 )
 @click.option(
     "--protein",
     help="Extracts unique hits from protein data stored at Protein folder. Use --directory for a custom folder.",
     is_flag=True,
     flag_value="protein",
-    type=str,
+    type=click.STRING,
 )
-@click.option("--directory", help="Sets path to a custom folder", type=str)
+@click.option("--directory", help="Sets path to a custom folder", type=click.STRING)
 @click.option(
     "--pattern",
     help='Custom pattern to find Blast output files. Default ".tsv".',
     default=".tsv",
-    type=str,
+    type=click.STRING,
 )
 def main(genomic, rna, protein, directory, pattern):
-    """Gets unique hits from BLAST output files based on genomes IDs."""
+    """Get unique hits from BLAST output files based on genomes IDs."""
     path = os.getcwd()
     data_type_lst = [genomic, rna, protein]
 

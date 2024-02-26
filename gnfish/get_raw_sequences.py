@@ -233,42 +233,42 @@ def generate_output_FASTA_file(
 @click.option(
     "--genomic",
     help="Extract unique hits from genomic data stored at Genomic folder or specify sequence type if using --directory argument.",
-    type=str,
+    type=click.STRING,
     is_flag=True,
     flag_value="genomic",
 )
 @click.option(
     "--rna",
     help="Extract unique hits from rna data stored at Rna folder or specify sequence type if using --directory argument.",
-    type=str,
+    type=click.STRING,
     is_flag=True,
     flag_value="rna",
 )
 @click.option(
     "--protein",
     help="Extract unique hits from protein data stored at Protein folder or specify sequence type if using --directory argument.",
-    type=str,
+    type=click.STRING,
     is_flag=True,
     flag_value="protein",
 )
-@click.option("--directory", help="Path to custom folder", type=str)
+@click.option("--directory", help="Path to custom folder", type=click.STRING)
 @click.option(
     "--blast_pattern",
     help='Custom pattern to find BLAST unique output files. Default "unique.tsv".',
     default="unique.tsv",
-    type=str,
+    type=click.STRING,
 )
 @click.option(
     "--genome_pattern",
     help='Pattern to find genome files. Default ".f[a,n]a".',
     default=".f[a,n]a",
-    type=str,
+    type=click.STRING,
 )
 @click.option(
     "--in_len",
     help="Number of sites extracted upstream and downstream from the blast hit. Default 10000. A whole sequence of at least 20000 sites if exists",
     default=10000,
-    type=int,
+    type=click.INT,
 )
 @click.option(
     "--query_seqs",
@@ -279,12 +279,12 @@ def generate_output_FASTA_file(
     "--query_seqs_num",
     help="Maximum number of query sequences extracted. Use it when you want to attach some sequences to genomic sequences for future alignments. 5 by default",
     default=5,
-    type=int,
+    type=click.INT,
 )
 @click.option(
     "--email",
     help="Mandatory when you want to download some sequences to complete the RAW files for future alignments. As in get_query_seqs.",
-    type=str,
+    type=click.STRING,
 )
 def main(
     genomic,

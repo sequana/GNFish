@@ -76,47 +76,50 @@ def blast(path, db_type, blast_path, query_type, query_file, out_exten, outfmt, 
 
 
 @click.command()
-@click.argument("blast_path", type=str, required=True)
-@click.argument("query_file", type=str, required=True)
-@click.argument("query_type", type=str, required=True)
+@click.argument("blast_path", type=click.STRING, required=True)
+@click.argument("query_file", type=click.STRING, required=True)
+@click.argument("query_type", type=click.STRING, required=True)
 @click.option(
     "--genomic",
-    type=str,
+    type=click.STRING,
     help="blast against genomic data stored at Genomic folder. Use directory for custom folder.",
     is_flag=True,
     flag_value="genomic",
 )
 @click.option(
     "--rna",
-    type=str,
+    type=click.STRING,
     help="blast against rna data stored at Rna folder. Use directory for custom folder.",
     is_flag=True,
     flag_value="rna",
 )
 @click.option(
     "--protein",
-    type=str,
+    type=click.STRING,
     help="blast against protein data stored at Protein folder. Use directory for custom folder.",
     is_flag=True,
     flag_value="protein",
 )
 @click.option(
     "--directory",
-    type=str,
+    type=click.STRING,
     help="sets path to custom folder (Genome files must have .fna (genomic and rna data) or .faa (protein data) extensions)",
 )
 @click.option(
     "--evalue",
-    type=str,
+    type=click.STRING,
     help="E-value threshold for search. Default value equal to 1e-10",
     default="1e-10",
 )
 @click.option(
-    "--outfmt", type=str, help="Output alignment options. Default value 6", default="6"
+    "--outfmt",
+    type=click.STRING,
+    help="Output alignment options. Default value 6",
+    default="6",
 )
 @click.option(
     "--out_exten",
-    type=str,
+    type=click.STRING,
     help='Extension of the BLAST output file. Default "_out.tsv".',
     default="_out.tsv",
 )

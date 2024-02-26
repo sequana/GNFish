@@ -168,7 +168,7 @@ def manage_create_directory(path):
 @click.command()
 @click.argument(
     "email",
-    type=str,
+    type=click.STRING,
     required=True,
 )
 @click.argument(
@@ -186,13 +186,13 @@ def manage_create_directory(path):
 )
 @click.option(
     "--retmax",
-    type=int,
+    type=click.INT,
     default=200,
     help="Number of NCBI records reported for every query. Default value is 200.",
 )
 @click.option(
     "--refine",
-    type=str,
+    type=click.STRING,
     default="",
     is_flag=False,
     flag_value="AND (latest[filter] AND 'representative genome'[filter] AND all[filter] NOT anomalous[filter])",

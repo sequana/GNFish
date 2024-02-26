@@ -97,34 +97,34 @@ def translate_sequences_all_sequences(
 @click.option(
     "--genomic",
     help="Extract unique hits from genome data stored at genome folder or specify genome type if using --directory argument.",
-    type=str,
+    type=click.STRING,
     is_flag=True,
     flag_value="genomic",
 )
 @click.option(
     "--rna",
     help="Extract unique hits from rna data stored at Rna folder or specify genome type if using --directory argument.",
-    type=str,
+    type=click.STRING,
     is_flag=True,
     flag_value="rna",
 )
-@click.option("--directory", help="Path to custom folder", type=str)
+@click.option("--directory", help="Path to custom folder", type=click.STRING)
 @click.option(
     "--genetic_code",
     help="Default 1 - Standard. Look below for the number of other genetic codes.",
-    type=int,
+    type=click.INT,
     default=1,
 )
 @click.option(
     "--pattern",
     help='Custom pattern to find files for translation. Default "_final.fas" and "RAW.fas" as backup.',
-    type=str,
+    type=click.STRING,
     default="final.fas",
 )
 @click.option(
     "--out_exten",
     help='Extension of the output file. Default "_translated.fas".',
-    type=str,
+    type=click.STRING,
     default="_translated.fas",
 )
 def main(genomic, rna, directory, genetic_code, pattern, out_exten):
