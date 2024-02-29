@@ -254,21 +254,24 @@ def generate_output_FASTA_file(
 @click.option("--directory", help="Path to custom folder", type=click.STRING)
 @click.option(
     "--blast_pattern",
-    help='Custom pattern to find BLAST unique output files. Default "unique.tsv".',
+    help="Custom pattern to find BLAST unique output files.",
     default="unique.tsv",
     type=click.STRING,
+    show_default=True,
 )
 @click.option(
     "--genome_pattern",
-    help='Pattern to find genome files. Default ".f[a,n]a".',
+    help="Pattern to find genome files.",
     default=".f[a,n]a",
     type=click.STRING,
+    show_default=True,
 )
 @click.option(
     "--in_len",
-    help="Number of sites extracted upstream and downstream from the blast hit. Default 10000. A whole sequence of at least 20000 sites if exists",
+    help="Number of sites extracted upstream and downstream from the blast hit.",
     default=10000,
     type=click.INT,
+    show_default=True,
 )
 @click.option(
     "--query_seqs",
@@ -277,9 +280,10 @@ def generate_output_FASTA_file(
 )
 @click.option(
     "--query_seqs_num",
-    help="Maximum number of query sequences extracted. Use it when you want to attach some sequences to genomic sequences for future alignments. 5 by default",
+    help="Maximum number of query sequences extracted. Use it when you want to attach some sequences to genomic sequences for future alignments.",
     default=5,
     type=click.INT,
+    show_default=True,
 )
 @click.option(
     "--email",

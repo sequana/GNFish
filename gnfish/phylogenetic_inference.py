@@ -16,14 +16,16 @@ import subprocess
 @click.option(
     "--iqtree_parameters",
     type=click.STRING,
-    help="command to run IQ-Tree, without output declaration, see next parameter. Default TEST, ULTRAFAST BOOSTRAP 1000, ALRT 1000 . See IQ-Tree manual for more options.",
+    help="command to run IQ-Tree, without output declaration, see next parameter. See IQ-Tree manual for more options.",
     default="-m TEST -B 1000 -alrt 1000",
+    show_default=True,
 )
 @click.option(
     "--output_suffix",
     type=click.STRING,
-    help="suffixes added to input file. Recommended, model and type of support. Default _TEST_UFBS_alrt",
+    help="suffixes added to input file. Recommended, model and type of support.",
     default="_TEST_UFBS_alrt",
+    show_default=True,
 )
 def main(iqtree_path, input_file, iqtree_parameters, output_suffix):
     """Conduct phylogenetic inference using IQ-Tree.

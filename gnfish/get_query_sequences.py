@@ -86,9 +86,10 @@ def get_seqs_data(term, retmax, name, email, db, curated, path):
 @click.option("--nucleotide", help="for nucleotide downloading", is_flag=True)
 @click.option(
     "--refine",
-    help='adds filter or field tags to the query. Constant value refseq[filter]. Follow constant value structure for your custom filters, begin with "AND".',
+    help='adds filter or field tags to the query. Constant value refseq[filter]. Follow flag value structure for your custom filters, begin with "AND".',
     type=click.STRING,
     default="",
+    show_default=True,
     is_flag=False,
     flag_value="refseq[filter]",
 )
@@ -99,11 +100,10 @@ def get_seqs_data(term, retmax, name, email, db, curated, path):
 )
 @click.option(
     "--retmax",
-    help="sets number of searched NCBI records. Default value equal to 200",
+    help="sets number of searched NCBI records.",
     type=click.INT,
     default=200,
-    is_flag=False,
-    flag_value=200,
+    show_default=True,
 )
 def main(email, query, nucleotide, refine, curated, retmax):
     """Download a set of protein for query for BLAST searches. Alternatively you can download nucleotide sequences using IDs.

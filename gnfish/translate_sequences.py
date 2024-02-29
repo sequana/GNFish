@@ -123,9 +123,10 @@ def translate_sequences_all_sequences(
 )
 @click.option(
     "--out_exten",
-    help='Extension of the output file. Default "_translated.fas".',
+    help="Extension of the output file.",
     type=click.STRING,
     default="_translated.fas",
+    show_default=True,
 )
 def main(genomic, rna, directory, genetic_code, pattern, out_exten):
     """Translates sequences."""

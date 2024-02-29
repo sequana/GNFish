@@ -19,9 +19,10 @@ import subprocess
 @click.argument("output_file", type=click.STRING)
 @click.option(
     "--trimal_parameters",
-    help="Command to run trimal options. Default -gt 0.1",
+    help="Command to run trimal options.",
     type=click.STRING,
     default="-gt 0.1",
+    show_default=True,
 )
 def main(trimal_path, input_file, output_file, trimal_parameters):
     """Trim an alignment using trimAl.

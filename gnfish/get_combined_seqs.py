@@ -112,12 +112,14 @@ def combine_all_sequences(
     help="By default, the pattern for file searching is “final.fas”. As back up to look for “final_translated.fas”, “RAW.fas”, and “RAW_translated.fas”.",
     type=click.STRING,
     default="final.fas",
+    show_default=True,
 )
 @click.option(
     "--out_exten",
-    help='extension of the output file. Default "_all_combined.fas".',
+    help="Extension of the output file.",
     type=click.STRING,
     default="_all_combined.fas",
+    show_default=True,
 )
 def main(
     output_name, output_path, genomic, rna, protein, directory, pattern, out_exten
