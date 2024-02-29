@@ -1,7 +1,7 @@
 import os
 import re
 import csv
-import argparse
+import click
 from gnfish.utils import list_files
 from Bio import Entrez
 from Bio import SeqIO
@@ -229,86 +229,76 @@ def generate_output_FASTA_file(
             )
 
 
-def main():
-    # Arguments
-    parser = argparse.ArgumentParser(
-        description="Extracts RAW sequence from genome information. Implemented for Genus_species_assemblyID or GC[A,F]_ID. Both Blast output and genome data files must have the same structure."
-    )
-    parser.add_argument(
-        "--genomic",
-        help="extract unique hits from genomic data stored at Genomic folder or specify sequence type if using --directory argument.",
-        nargs="?",
-        const="genomic",
-        type=str,
-    )
-    parser.add_argument(
-        "--rna",
-        help="extract unique hits from rna data stored at Rna folder or specify sequence type if using --directory argument.",
-        nargs="?",
-        const="rna",
-        type=str,
-    )
-    parser.add_argument(
-        "--protein",
-        help="extract unique hits from protein data stored at Protein folder or specify sequence type if using --directory argument.",
-        nargs="?",
-        const="protein",
-        type=str,
-    )
-    parser.add_argument("--directory", help="path to custom folder", type=str)
-    parser.add_argument(
-        "--blast_pattern",
-        help='custom pattern to find BLAST unique output files. Default "unique.tsv".',
-        nargs="?",
-        default="unique.tsv",
-        const="unique.tsv",
-        type=str,
-    )
-    parser.add_argument(
-        "--genome_pattern",
-        help='pattern to find genome files. Default ".f[a,n]a".',
-        nargs="?",
-        default=".f[a,n]a",
-        const=".f[a,n]a",
-        type=str,
-    )
-    parser.add_argument(
-        "--in_len",
-        help="Number of sites extracted upstream and downstream from the blast hit. Default 10000. A whole sequence of at least 20000 sites if exists",
-        nargs="?",
-        default=10000,
-        type=int,
-    )
-    parser.add_argument(
-        "--query_seqs",
-        help="Use it when you want to attach some query sequences according to BLAST results for future alignments",
-        action="store_true",
-    )
-    parser.add_argument(
-        "--query_seqs_num",
-        help="Maximum number of query sequences extracted. Use it when you want to attach some sequences to genomic sequences for future alignments. 5 by default",
-        nargs="?",
-        default=5,
-        type=int,
-    )
-    parser.add_argument(
-        "--email",
-        help="Mandatory when you want to download some sequences to complete the RAW files for future alignments. As in get_query_seqs. ",
-        nargs="?",
-        type=str,
-    )
-
-    args = parser.parse_args()
-    genomic = args.genomic
-    rna = args.rna
-    protein = args.protein
-    directory = args.directory
-    blast_pattern = args.blast_pattern
-    genome_pattern = args.genome_pattern
-    in_len = args.in_len
-    query_seqs = args.query_seqs
-    query_seqs_num = args.query_seqs_num
-    email = args.email
+@click.command()
+@click.option(
+    "--genomic",
+    help="Extract unique hits from genomic data stored at Genomic folder or specify sequence type if using --directory argument.",
+    type=click.STRING,
+    is_flag=True,
+    flag_value="genomic",
+)
+@click.option(
+    "--rna",
+    help="Extract unique hits from rna data stored at Rna folder or specify sequence type if using --directory argument.",
+    type=click.STRING,
+    is_flag=True,
+    flag_value="rna",
+)
+@click.option(
+    "--protein",
+    help="Extract unique hits from protein data stored at Protein folder or specify sequence type if using --directory argument.",
+    type=click.STRING,
+    is_flag=True,
+    flag_value="protein",
+)
+@click.option("--directory", help="Path to custom folder", type=click.STRING)
+@click.option(
+    "--blast_pattern",
+    help='Custom pattern to find BLAST unique output files. Default "unique.tsv".',
+    default="unique.tsv",
+    type=click.STRING,
+)
+@click.option(
+    "--genome_pattern",
+    help='Pattern to find genome files. Default ".f[a,n]a".',
+    default=".f[a,n]a",
+    type=click.STRING,
+)
+@click.option(
+    "--in_len",
+    help="Number of sites extracted upstream and downstream from the blast hit. Default 10000. A whole sequence of at least 20000 sites if exists",
+    default=10000,
+    type=click.INT,
+)
+@click.option(
+    "--query_seqs",
+    help="Use it when you want to attach some query sequences according to BLAST results for future alignments",
+    is_flag=True,
+)
+@click.option(
+    "--query_seqs_num",
+    help="Maximum number of query sequences extracted. Use it when you want to attach some sequences to genomic sequences for future alignments. 5 by default",
+    default=5,
+    type=click.INT,
+)
+@click.option(
+    "--email",
+    help="Mandatory when you want to download some sequences to complete the RAW files for future alignments. As in get_query_seqs.",
+    type=click.STRING,
+)
+def main(
+    genomic,
+    rna,
+    protein,
+    directory,
+    blast_pattern,
+    genome_pattern,
+    in_len,
+    query_seqs,
+    query_seqs_num,
+    email,
+):
+    """Extract RAW sequences from whole genome derived data. Implemented for Genus_species_assemblyID or GC[A,F]_ID. Both Blast output and genome data files must have the same structure."""
     path = os.getcwd()
     data_type_lst = [genomic, rna, protein]
 

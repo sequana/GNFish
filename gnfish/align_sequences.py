@@ -5,7 +5,7 @@ Program to align sequences using MAFFT tool.
 
 import os
 import re
-import argparse
+import click
 import subprocess
 from gnfish.utils import list_files
 
@@ -54,56 +54,40 @@ def read_FASTA_sequences(fasta_input_file):
     ]
 
 
-def main():
-    # Arguments
-    parser = argparse.ArgumentParser(
-        description="Aligns files enclosed at Data folder or your custom file. More info at README.md file"
-    )
-    parser.add_argument(
-        "--genomic",
-        help="extracts unique hits from whole genome data stored at Genomic folder or specify genome type if using --directory argument.",
-        nargs="?",
-        const="genomic",
-        type=str,
-    )
-    parser.add_argument(
-        "--rna",
-        help="extracts unique hits from annotated RNA sequences from genomic data stored at Rna folder or specifies genome type if using --directory argument.",
-        nargs="?",
-        const="rna",
-        type=str,
-    )
-    parser.add_argument(
-        "--protein",
-        help="extracts unique hits from annotated protein sequences from genomic data stored at Protein folder or specifies genome type if using --directory argument.",
-        nargs="?",
-        const="protein",
-        type=str,
-    )
-    parser.add_argument("--directory", help="sets path to custom folder", type=str)
-    parser.add_argument(
-        "--algorithm",
-        help="sets MAFFT algorithm. Default --auto (automatic)",
-        nargs="?",
-        default="--auto",
-        const="--auto",
-        type=str,
-    )
-    parser.add_argument(
-        "--pattern",
-        help="sets custom pattern to find files for alignment. Default RAW.fas.",
-        nargs="?",
-        default="RAW.fas",
-        const="RAW.fas",
-        type=str,
-    )
-    args = parser.parse_args()
-    genomic = args.genomic
-    rna = args.rna
-    protein = args.protein
-    directory = args.directory
-    pattern = args.pattern
-    algorithm = args.algorithm
+@click.command()
+@click.option(
+    "--genomic",
+    help="Extracts unique hits from whole genome data stored at Genomic folder or specify genome type if using --directory argument.",
+    is_flag=True,
+    flag_value="genomic",
+)
+@click.option(
+    "--rna",
+    help="Extracts unique hits from annotated RNA sequences from genomic data stored at Rna folder or specifies genome type if using --directory argument.",
+    is_flag=True,
+    flag_value="rna",
+)
+@click.option(
+    "--protein",
+    help="Extracts unique hits from annotated protein sequences from genomic data stored at Protein folder or specifies genome type if using --directory argument.",
+    is_flag=True,
+    flag_value="protein",
+)
+@click.option("--directory", help="Sets path to custom folder", type=click.STRING)
+@click.option(
+    "--algorithm",
+    help="Sets MAFFT algorithm. Default --auto (automatic)",
+    default="--auto",
+    type=click.STRING,
+)
+@click.option(
+    "--pattern",
+    help="Sets custom pattern to find files for alignment. Default RAW.fas.",
+    default="RAW.fas",
+    type=click.STRING,
+)
+def main(genomic, rna, protein, directory, algorithm, pattern):
+    """Align files enclosed at Data folder or your custom file. More info at README.md file."""
     path = os.getcwd()
     data_type_lst = [genomic, rna, protein]
 

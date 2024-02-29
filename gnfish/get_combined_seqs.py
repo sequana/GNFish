@@ -9,7 +9,7 @@ Created on Tue Dec 21 13:10:39 2021
 
 import os
 import re
-import argparse
+import click
 from gnfish.utils import list_files
 from loguru import logger
 
@@ -82,66 +82,54 @@ def combine_all_sequences(
                 file.write("\n")
 
 
-def main():
-    # Arguments
-    parser = argparse.ArgumentParser(
-        description="Combines FASTA files in just one matrix"
-    )
-    parser.add_argument(
-        "output_name",
-        help="name for the file of the combined matrix",
-        nargs="?",
-        type=str,
-    )
-    parser.add_argument(
-        "output_path", help="path were to store the combined matrix.", type=str
-    )
-    parser.add_argument(
-        "--genomic",
-        help="looks at ./Data/Genomic.",
-        nargs="?",
-        const="genomic",
-        type=str,
-    )
-    parser.add_argument(
-        "--rna", help="looks at ./Data/Rna.", nargs="?", const="rna", type=str
-    )
-    parser.add_argument(
-        "--protein",
-        help="looks at ./Data/Protein.",
-        nargs="?",
-        const="protein",
-        type=str,
-    )
-    parser.add_argument("--directory", help="sets path to custom folder.", type=str)
-    parser.add_argument(
-        "--pattern",
-        help="By default, the pattern for file searching is “final.fas”. As back up to look for “final_translated.fas”, “RAW.fas”, and “RAW_translated.fas”.",
-        nargs="?",
-        default="final.fas",
-        const="final.fas",
-        type=str,
-    )
-    parser.add_argument(
-        "--out_exten",
-        help='extension of the output file. Default "_all_combined.fas".',
-        nargs="?",
-        type=str,
-        default="_all_combined.fas",
-    )
-    args = parser.parse_args()
-    output_name = args.output_name
-    output_path = args.output_path
-    genomic = args.genomic
-    rna = args.rna
-    protein = args.protein
-    directory = args.directory
-    pattern = args.pattern
-    # pattern = re.sub("\.fas", "", pattern)
-    out_exten = args.out_exten
+@click.command()
+@click.argument("output_name", type=click.STRING)
+@click.argument("output_path", type=click.STRING)
+@click.option(
+    "--genomic",
+    help="looks at ./Data/Genomic.",
+    type=click.STRING,
+    is_flag=True,
+    flag_value="genomic",
+)
+@click.option(
+    "--rna",
+    help="looks at ./Data/Rna.",
+    type=click.STRING,
+    is_flag=True,
+    flag_value="rna",
+)
+@click.option(
+    "--protein",
+    help="looks at ./Data/Protein.",
+    type=click.STRING,
+    is_flag=True,
+    flag_value="protein",
+)
+@click.option("--directory", help="sets path to custom folder.", type=click.STRING)
+@click.option(
+    "--pattern",
+    help="By default, the pattern for file searching is “final.fas”. As back up to look for “final_translated.fas”, “RAW.fas”, and “RAW_translated.fas”.",
+    type=click.STRING,
+    default="final.fas",
+)
+@click.option(
+    "--out_exten",
+    help='extension of the output file. Default "_all_combined.fas".',
+    type=click.STRING,
+    default="_all_combined.fas",
+)
+def main(
+    output_name, output_path, genomic, rna, protein, directory, pattern, out_exten
+):
+    """Combine FASTA files in just one matrix.
+
+    OUTPUT_NAME name for the file of the combined matrix.
+
+    OUTPUT_PATH path were to store the combined matrix.
+    """
     path = os.getcwd()
     data_type_lst = [genomic, rna, protein]
-    print(directory)
 
     if directory is not None:
         for data_type in data_type_lst:

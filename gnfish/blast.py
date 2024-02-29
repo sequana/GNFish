@@ -8,7 +8,7 @@ Created on Thu Jun 17 09:56:24 2021
 import os
 import sys
 import re
-import argparse
+import click
 import subprocess
 from gnfish.utils import list_files
 from loguru import logger
@@ -75,78 +75,74 @@ def blast(path, db_type, blast_path, query_type, query_file, out_exten, outfmt, 
         subprocess.run(blastCommand)
 
 
-def main():
-    # Arguments
-    parser = argparse.ArgumentParser(
-        description="BLAST against genome .fna and .faa files."
-    )
-    parser.add_argument("blast_path", help="path to ncbi-blast directory", type=str)
-    parser.add_argument(
-        "query_file",
-        help="path to your query file with your reference sequences (Fasta file with prot or nucl seqs)",
-        type=str,
-    )
-    parser.add_argument(
-        "query_type", help="data type of query sequences. prot or nucl", type=str
-    )
-    parser.add_argument(
-        "--genomic",
-        help="blast against genomic data stored at Genomic folder. Use directory for custom folder.",
-        nargs="?",
-        const="genomic",
-        type=str,
-    )
-    parser.add_argument(
-        "--rna",
-        help="blast against rna data stored at Rna folder. Use directory for custom folder.",
-        nargs="?",
-        const="rna",
-        type=str,
-    )
-    parser.add_argument(
-        "--protein",
-        help="blast against protein data stored at Protein folder. Use directory for custom folder.",
-        nargs="?",
-        const="protein",
-        type=str,
-    )
-    parser.add_argument(
-        "--directory",
-        help="sets path to custom folder (Genome files must have .fna (genomic and rna data) or .faa (protein data) extensions)",
-        type=str,
-    )
-    parser.add_argument(
-        "--evalue",
-        help="E-value threshold for search. Default value equal to 1e-10",
-        nargs="?",
-        type=str,
-        default="1e-10",
-    )
-    parser.add_argument(
-        "--outfmt",
-        help="Output alignment options. Default value 6",
-        nargs="?",
-        type=str,
-        default="6",
-    )
-    parser.add_argument(
-        "--out_exten",
-        help='Extension of the BLAST output file. Default "_out.tsv".',
-        nargs="?",
-        type=str,
-        default="_out.tsv",
-    )
-    args = parser.parse_args()
-    blast_path = re.sub("'", "", args.blast_path)
-    query_file = re.sub("'", "", args.query_file)
-    query_type = args.query_type
-    genomic = args.genomic
-    rna = args.rna
-    protein = args.protein
-    directory = args.directory
-    evalue = args.evalue
-    outfmt = args.outfmt
-    out_exten = args.out_exten
+@click.command()
+@click.argument("blast_path", type=click.STRING, required=True)
+@click.argument("query_file", type=click.STRING, required=True)
+@click.argument("query_type", type=click.STRING, required=True)
+@click.option(
+    "--genomic",
+    type=click.STRING,
+    help="blast against genomic data stored at Genomic folder. Use directory for custom folder.",
+    is_flag=True,
+    flag_value="genomic",
+)
+@click.option(
+    "--rna",
+    type=click.STRING,
+    help="blast against rna data stored at Rna folder. Use directory for custom folder.",
+    is_flag=True,
+    flag_value="rna",
+)
+@click.option(
+    "--protein",
+    type=click.STRING,
+    help="blast against protein data stored at Protein folder. Use directory for custom folder.",
+    is_flag=True,
+    flag_value="protein",
+)
+@click.option(
+    "--directory",
+    type=click.STRING,
+    help="sets path to custom folder (Genome files must have .fna (genomic and rna data) or .faa (protein data) extensions)",
+)
+@click.option(
+    "--evalue",
+    type=click.STRING,
+    help="E-value threshold for search. Default value equal to 1e-10",
+    default="1e-10",
+)
+@click.option(
+    "--outfmt",
+    type=click.STRING,
+    help="Output alignment options. Default value 6",
+    default="6",
+)
+@click.option(
+    "--out_exten",
+    type=click.STRING,
+    help='Extension of the BLAST output file. Default "_out.tsv".',
+    default="_out.tsv",
+)
+def main(
+    blast_path,
+    query_file,
+    query_type,
+    genomic,
+    rna,
+    protein,
+    directory,
+    evalue,
+    outfmt,
+    out_exten,
+):
+    """BLAST against genome .fna and .faa files.
+
+    BLAST_PATH path to ncbi-blast directory.
+
+    QUERY_FILE path to your query file with your reference sequences (Fasta file with prot or nucl seqs).
+
+    QUERY_TYPE data type of query sequences. prot or nucl.
+    """
     path = os.getcwd()
     db_type_lst = [genomic, rna, protein]
 

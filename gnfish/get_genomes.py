@@ -5,7 +5,7 @@ import os
 import urllib
 from Bio import Entrez
 import re
-import argparse
+import click
 import csv
 
 from loguru import logger
@@ -42,17 +42,23 @@ def create_directory(directory, path):
     if not os.path.isdir(directory):
         os.mkdir(directory)
     else:
-        logger.warning(f"{directory} directory already exits. New data will be added to previous one.")
+        logger.warning(
+            f"{directory} directory already exits. New data will be added to previous one."
+        )
 
 
-def get_assembly_data(url, label, species, id_num, path, data_type="genomic", ext=".fna.gz"):
+def get_assembly_data(
+    url, label, species, id_num, path, data_type="genomic", ext=".fna.gz"
+):
     try:
         link = os.path.join(url, label + "_" + data_type + ext)
         link = re.sub("\\\\", "/", link)
         directory = data_type.capitalize() + "/" + species
         dir_path = re.sub("\\\\", "/", path + "/" + directory)
         create_directory(directory, path)
-        urllib.request.urlretrieve(link, "%s/%s" % (dir_path, species + "_" + id_num + "_" + data_type + ext))
+        urllib.request.urlretrieve(
+            link, "%s/%s" % (dir_path, species + "_" + id_num + "_" + data_type + ext)
+        )
         return True
     except:
         dir_path = re.sub("\\\\", "/", path + "/" + directory)
@@ -64,7 +70,9 @@ def get_assembly_data(url, label, species, id_num, path, data_type="genomic", ex
 
 
 def print_running_info(argument):
-    logger.info(f"Running --{argument} argument. Check help or README file for further information.")
+    logger.info(
+        f"Running --{argument} argument. Check help or README file for further information."
+    )
 
 
 def print_already_downloaded_info(data_type, species, id_num):
@@ -79,113 +87,39 @@ def print_successful_download(data_type, species, id_num):
     )
 
 
-def launch_get_assembly_data(url, label, species, id_num, result, exclusive, data_lst, path):
+def launch_get_assembly_data(
+    url, label, species, id_num, row, exclusive, data_lst, path
+):
+    data_types = {"genomic": 0, "rna": 1, "protein": 2}
     downloaded = False
     for data_type in data_lst:
-        if data_type == "protein":
-            if result[2] == "0":
-                downloaded = get_assembly_data(url, label, species, id_num, path, data_type, ext=".faa.gz")
-            else:
-                print_already_downloaded_info(data_type, species, id_num)
+        idx = data_types[data_type]
+        if row[idx] == "0":
+            downloaded = (
+                get_assembly_data(
+                    url, label, species, id_num, path, data_type, ext=".faa.gz"
+                )
+                if data_type == "protein"
+                else get_assembly_data(url, label, species, id_num, path, data_type)
+            )
             if downloaded:
-                result[2] = "1"
-                print_successful_download(data_type, species, id_num)
-            else:
-                if not exclusive:
-                    downloaded = get_assembly_data(url, label, species, id_num, path)
-                    if downloaded:
-                        result[0] = "1"
-                        print_successful_download("genomic", species, id_num)
-        elif data_type == "genomic":
-            if result[0] == "0":
-                downloaded = get_assembly_data(url, label, species, id_num, path, data_type)
-            else:
-                print_already_downloaded_info(data_type, species, id_num)
-            if downloaded:
-                result[0] = "1"
+                row[idx] = "1"
                 print_successful_download(data_type, species, id_num)
         else:
-            if result[1] == "0":
-                downloaded = get_assembly_data(url, label, species, id_num, path, data_type)
-            else:
-                print_already_downloaded_info(data_type, species, id_num)
+            print_already_downloaded_info(data_type, species, id_num)
+
+        if not exclusive and data_type != "genomic" and not downloaded:
+            downloaded = get_assembly_data(url, label, species, id_num, path)
             if downloaded:
-                result[1] = "1"
-                print_successful_download(data_type, species, id_num)
-            else:
-                if not exclusive:
-                    downloaded = get_assembly_data(url, label, species, id_num, path)
-                    if downloaded:
-                        result[0] = "1"
-                        print_successful_download("genomic", species, id_num)
-    return result
-
-
-def upddate_rows_info(url, label, species, id_num, rows, exclusive, data_lst, path):
-    found = False
-    for row in rows:
-        if row[1] == id_num:
-            found = True
-            result = launch_get_assembly_data(url, label, species, id_num, row[2:5], exclusive, data_lst, path)
-            row[2] = result[0]
-            row[3] = result[1]
-            row[4] = result[2]
-    if not found:
-        result = launch_get_assembly_data(url, label, species, id_num, ["0", "0", "0"], exclusive, data_lst, path)
-        rows.append([species, id_num, result[0], result[1], result[2]])
-    return rows
+                row[0] = "1"
+                print_successful_download("genomic", species, id_num)
+    return row
 
 
 def get_assembly_summary(id_num, db):
-    from Bio import Entrez
-
     esummary_handle = Entrez.esummary(db=db, id=id_num, report="full")
     esummary_record = Entrez.read(esummary_handle, validate=False)
     return esummary_record
-
-
-def get_seq_data(term, rows, retmax, db, email, exclusive, data_lst, path):
-    Entrez.email = email
-    handle = Entrez.esearch(db=db, term=term, retmax=retmax, sort="Significance")
-    record = Entrez.read(handle)
-    handle.close()
-    try:
-        error_sentence = record["ErrorList"]["PhraseNotFound"]
-        logger.error(
-            f"{error_sentence} from {term} not found and can be unpredictable. Check out '{term}' on 'https://www.ncbi.nlm.nih.gov/' assembly database or correct {error_sentence} terms.\n"
-        )
-    except KeyError:
-        ids = record["IdList"]
-        for id_num in ids:
-            summary = get_assembly_summary(id_num, db)
-            species = summary["DocumentSummarySet"]["DocumentSummary"][0]["Organism"]
-            species = re.sub(" ", "_", species)
-            species = re.search("(.*?_.*?)_.*", species)
-            species = species.group(1)
-            url = summary["DocumentSummarySet"]["DocumentSummary"][0]["FtpPath_RefSeq"]
-            if url == "":
-                url = summary["DocumentSummarySet"]["DocumentSummary"][0]["FtpPath_GenBank"]
-            if url == "":
-                logger.warning(
-                    f"No available {db} data for {species}. Check {species} in 'https://www.ncbi.nlm.nih.gov/'"
-                )
-            else:
-                label = os.path.basename(url)
-                rows = upddate_rows_info(url, label, species, id_num, rows, exclusive, data_lst, path)
-    return rows
-
-
-def launch_get_genomes(rows, refine, retmax, query_file, db, email, exclusive, data_lst, path):
-    new_rows = []
-    query_lst = query_file.read().split("\n")
-    for query in query_lst:
-        if query == "":
-            continue
-        else:
-            term = query + " " + str(refine)
-            logger.info(f"Searching for {term} at NCBI Assembly database.")
-            new_rows = get_seq_data(term, rows, retmax, db, email, exclusive, data_lst, path)
-    return new_rows
 
 
 def check_file(input_file):
@@ -199,75 +133,86 @@ def check_file(input_file):
         return False
 
 
-def write_extraction_file(tsv_output_file, refine, retmax, query_file, db, email, exclusive, data_lst, path):
-    rows = []
-    if check_file(tsv_output_file):
-        rows = read_tsv_file(tsv_output_file)
-    else:
-        rows = [["Query_name", "Assembly_ID", "Genomic", "RNA", "Protein"]]
-    new_rows = launch_get_genomes(rows, refine, retmax, query_file, db, email, exclusive, data_lst, path)
-    # new_rows = new_rows.sort()
-    with open(tsv_output_file, "w") as file:
-        for new_row in new_rows:
-            for col in new_row:
-                if col != "":
-                    file.write(str(col) + "\t")
-            file.write("\n")
-    logger.info(
-        "Genomes download ended. At Data/downloaded_genomes_log.tsv. You can find information about the downloaded genomes."
-    )
+def extract_url(summary):
+    url = summary["DocumentSummarySet"]["DocumentSummary"][0]["FtpPath_RefSeq"]
+    if not url:
+        url = summary["DocumentSummarySet"]["DocumentSummary"][0]["FtpPath_GenBank"]
+    return url
 
 
-def main():
-    # Arguments
-    parser = argparse.ArgumentParser(
-        description="Downloads genome, transcript and protein information from NCBI database."
-    )
-    parser.add_argument("email", help="mandatory e-mail for NCBI searches", type=str)
-    parser.add_argument("query", help="file with the queries", type=argparse.FileType("r"))
-    parser.add_argument("--genomic", help="downloads whole genomic data", action="store_true")
-    parser.add_argument("--rna", help="downloads protein annotation data", action="store_true")
-    parser.add_argument("--protein", help="downloads protein annotation data", action="store_true")
-    parser.add_argument(
-        "--exclusive", help="download just protein or rna annotation data if available.", action="store_true"
-    )
-    parser.add_argument(
-        "--retmax",
-        help="number of NCBI records reported for every query. Default value equal to 200",
-        nargs="?",
-        const=200,
-        type=int,
-        default=200,
-    )
-    parser.add_argument(
-        "--refine",
-        help='adds filter or field information to all queries. Constant value AND (latest[filter] AND "representative genome"[filter] AND all[filter] NOT anomalous[filter]). Follow constant value structure for your custom refine.',
-        nargs="?",
-        const='AND (latest[filter] AND "representative genome"[filter] AND all[filter] NOT anomalous[filter])',
-        type=str,
-        default="",
-    )
-    args = parser.parse_args()
-    query_file = args.query
-    genomic = args.genomic
-    rna = args.rna
-    protein = args.protein
-    email = args.email
-    exclusive = args.exclusive
-    retmax = args.retmax
-    refine = args.refine
-    data_lst = []
-    db = "assembly"
-    path = os.getcwd()
+def get_record_entrez(db, email, term, retmax):
+    Entrez.email = email
+    handle = Entrez.esearch(db=db, term=term, retmax=retmax, sort="Significance")
+    record = Entrez.read(handle)
+    handle.close()
+    return record
 
-    for arg in args.__dict__:
-        if args.__dict__[arg]:
-            print_running_info(arg)
+
+def get_species(summary):
+    species = summary["DocumentSummarySet"]["DocumentSummary"][0]["Organism"]
+    species = re.sub(" ", "_", species)
+    species = re.search("(.*?_.*?)_.*", species)
+    species = species.group(1)
+    return species
+
+
+def manage_create_directory(path):
     create_directory("../Data", path)
     path = path + "/../Data"
     create_directory("Genomic", path)
     create_directory("Rna", path)
     create_directory("Protein", path)
+    return path
+
+
+@click.command()
+@click.argument(
+    "email",
+    type=click.STRING,
+    required=True,
+)
+@click.argument(
+    "query",
+    type=click.File("r"),
+    required=True,
+)
+@click.option("--genomic", is_flag=True, help="Downloads whole genomic data.")
+@click.option("--rna", is_flag=True, help="Downloads protein annotation data.")
+@click.option("--protein", is_flag=True, help="Downloads protein annotation data.")
+@click.option(
+    "--exclusive",
+    is_flag=True,
+    help="Download just protein or RNA annotation data if available.",
+)
+@click.option(
+    "--retmax",
+    type=click.INT,
+    default=200,
+    help="Number of NCBI records reported for every query. Default value is 200.",
+)
+@click.option(
+    "--refine",
+    type=click.STRING,
+    default="",
+    is_flag=False,
+    flag_value="AND (latest[filter] AND 'representative genome'[filter] AND all[filter] NOT anomalous[filter])",
+    help='Adds filter or field information to all queries. Constant value "AND (latest[filter] AND "representative genome"[filter] AND all[filter] NOT anomalous[filter])". Follow constant value structure for your custom refine.',
+)
+def main(email, query, genomic, rna, protein, exclusive, retmax, refine):
+    """Download genome, transcript, and protein data from NCBI database.
+
+        EMAIL your email for connecting to NCBI database.
+
+    QUERY path to the file with your queries.
+    """
+    params_to_log = {key: value for key, value in locals().items() if value is not None}
+    print_running_info(params_to_log)
+    data_lst = []
+    db = "assembly"
+    path = manage_create_directory(os.getcwd())
+    tsv_output_file = path + "/downloaded_genomes_log.tsv"
+    rows = []
+    query_lst = query.read().split("\n")
 
     # Checks data type
     if genomic == rna == protein is False:
@@ -281,6 +226,72 @@ def main():
             data_lst.append("genomic")
 
     # Runs the program
-    write_extraction_file(
-        path + "/downloaded_genomes_log.tsv", refine, retmax, query_file, db, email, exclusive, data_lst, path
+    if check_file(tsv_output_file):
+        rows = read_tsv_file(tsv_output_file)
+    else:
+        rows = [["Query_name", "Assembly_ID", "Genomic", "RNA", "Protein"]]
+
+    for query in query_lst:
+        if query == "":
+            continue
+        else:
+            term = query + " " + str(refine)
+            logger.info(f"Searching for {term} at NCBI Assembly database.")
+            record = get_record_entrez(db, email, term, retmax)
+            try:
+                error_sentence = record["ErrorList"]["PhraseNotFound"]
+                logger.error(
+                    f"{error_sentence} from {term} not found and can be unpredictable. Check out '{term}' on 'https://www.ncbi.nlm.nih.gov/' assembly database or correct {error_sentence} terms.\n"
+                )
+            except KeyError:
+                ids = record["IdList"]
+                for id_num in ids:
+                    summary = get_assembly_summary(id_num, db)
+                    species = get_species(summary)
+                    url = extract_url(summary)
+                    if not url:
+                        logger.warning(
+                            f"No available {db} data for {species}. Check {species} in 'https://www.ncbi.nlm.nih.gov/'"
+                        )
+                    else:
+                        label = os.path.basename(url)
+                        found = False
+                        for row in rows:
+                            if row[1] == id_num:
+                                found = True
+                                result = launch_get_assembly_data(
+                                    url,
+                                    label,
+                                    species,
+                                    id_num,
+                                    row[2:5],
+                                    exclusive,
+                                    data_lst,
+                                    path,
+                                )
+                                row[2] = result[0]
+                                row[3] = result[1]
+                                row[4] = result[2]
+                        if not found:
+                            result = launch_get_assembly_data(
+                                url,
+                                label,
+                                species,
+                                id_num,
+                                ["0", "0", "0"],
+                                exclusive,
+                                data_lst,
+                                path,
+                            )
+                            rows.append(
+                                [species, id_num, result[0], result[1], result[2]]
+                            )
+    with open(tsv_output_file, "w") as file:
+        for row in rows:
+            for col in row:
+                if col != "":
+                    file.write(str(col) + "\t")
+            file.write("\n")
+    logger.info(
+        "Genomes download ended. At Data/downloaded_genomes_log.tsv. You can find information about the downloaded genomes."
     )
