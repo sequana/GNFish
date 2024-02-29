@@ -73,7 +73,11 @@ def read_FASTA_sequences(fasta_input_file):
     is_flag=True,
     flag_value="protein",
 )
-@click.option("--directory", help="Sets path to custom folder", type=click.STRING)
+@click.option(
+    "--directory",
+    help="Sets path to custom folder",
+    type=click.Path(exists=True, dir_okay=True),
+)
 @click.option(
     "--algorithm",
     help="Sets MAFFT algorithm.",

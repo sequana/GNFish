@@ -108,7 +108,11 @@ def translate_sequences_all_sequences(
     is_flag=True,
     flag_value="rna",
 )
-@click.option("--directory", help="Path to custom folder", type=click.STRING)
+@click.option(
+    "--directory",
+    help="Path to custom folder",
+    type=click.Path(exists=True, dir_okay=True),
+)
 @click.option(
     "--genetic_code",
     help="Default 1 - Standard. Look below for the number of other genetic codes.",

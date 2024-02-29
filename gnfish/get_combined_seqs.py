@@ -106,7 +106,11 @@ def combine_all_sequences(
     is_flag=True,
     flag_value="protein",
 )
-@click.option("--directory", help="sets path to custom folder.", type=click.STRING)
+@click.option(
+    "--directory",
+    help="sets path to custom folder.",
+    type=click.Path(exists=True, dir_okay=True),
+)
 @click.option(
     "--pattern",
     help="By default, the pattern for file searching is “final.fas”. As back up to look for “final_translated.fas”, “RAW.fas”, and “RAW_translated.fas”.",

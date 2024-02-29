@@ -251,7 +251,11 @@ def generate_output_FASTA_file(
     is_flag=True,
     flag_value="protein",
 )
-@click.option("--directory", help="Path to custom folder", type=click.STRING)
+@click.option(
+    "--directory",
+    help="Path to custom folder",
+    type=click.Path(exists=True, dir_okay=True),
+)
 @click.option(
     "--blast_pattern",
     help="Custom pattern to find BLAST unique output files.",
