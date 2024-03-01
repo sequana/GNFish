@@ -84,26 +84,30 @@ def launch_get_assembly_data(
 ):
     downloaded = False
     for data_type in data_lst:
-        resultado = log_file_data.loc[
+        result = log_file_data.loc[
             log_file_data["Assembly_ID"] == id_num, data_type.capitalize()
         ]
-        if int(resultado.iloc[0]) == 0:
+        if result.iloc[0] == 0:
             downloaded = get_assembly_data(url, label, species, id_num, path, data_type)
-        else:
+        elif result.iloc[0] > 0:
             print_already_downloaded_info(data_type, species, id_num)
         if (
             not exclusive
             and data_type != "genomic"
             and not downloaded
-            and log_file_data.loc[log_file_data["Assembly_ID"] == id_num, "Genomic"]
-            == "0"
+            and int(
+                log_file_data.loc[
+                    log_file_data["Assembly_ID"] == id_num, "Genomic"
+                ].iloc[0]
+            )
+            == 0
         ):
             data_type = "genomic"
             downloaded = get_assembly_data(url, label, species, id_num, path, data_type)
         if downloaded:
             log_file_data.loc[
                 log_file_data["Assembly_ID"] == id_num, data_type.capitalize()
-            ] = "1"
+            ] = 1
             print_successful_download("genomic", species, id_num)
     return log_file_data
 
@@ -158,7 +162,9 @@ def manage_create_directory(path):
 
 
 @click.command()
-@click.argument("working_dir", type=click.STRING, required=True)
+@click.argument(
+    "working_dir", type=click.Path(exists=True, dir_okay=True), required=True
+)
 @click.argument(
     "email",
     type=click.STRING,
@@ -193,20 +199,21 @@ def manage_create_directory(path):
     flag_value="AND (latest[filter] AND 'representative genome'[filter] AND all[filter] NOT anomalous[filter])",
     help='Adds filter or field information to all queries. Flagq value "AND (latest[filter] AND "representative genome"[filter] AND all[filter] NOT anomalous[filter])". Follow constant value structure for your custom refine.',
 )
-def main(email, query, genomic, rna, protein, exclusive, retmax, refine):
+def main(working_dir, email, query, genomic, rna, protein, exclusive, retmax, refine):
     """Download genome, transcript, and protein data from NCBI database.
 
-        EMAIL your email for connecting to NCBI database.
+    WORKING_DIR set the path to you working directory where Data folder is going to be created.
 
-    QUERY path to the file with your queries.
+            EMAIL your email for connecting to NCBI database.
+
+        QUERY path to the file with your queries.
     """
     params_to_log = {key: value for key, value in locals().items() if value is not None}
     print_running_info(params_to_log)
     data_lst = []
     db = "assembly"
-    path = manage_create_directory(os.getcwd())
-    tsv_output_file = path + "/downloaded_genomes_log.tsv"
-    rows = []
+    data_dir = manage_create_directory(working_dir)
+    log_file = data_dir + "/downloaded_genomes_log.tsv"
     query_lst = query.read().split("\n")
 
     # Checks data type
@@ -226,7 +233,7 @@ def main(email, query, genomic, rna, protein, exclusive, retmax, refine):
         log_file_data["Assembly_ID"] = log_file_data["Assembly_ID"].astype(str)
     else:
         log_file_data = pd.DataFrame(
-            columns=["Species", "Assembly_ID", "Genomic", "RNA", "Protein"]
+            columns=["Species", "Assembly_ID", "Genomic", "Rna", "Protein"]
         )
     for query in query_lst:
         if query == "":
