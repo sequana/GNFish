@@ -73,17 +73,23 @@ def read_FASTA_sequences(fasta_input_file):
     is_flag=True,
     flag_value="protein",
 )
-@click.option("--directory", help="Sets path to custom folder", type=click.STRING)
+@click.option(
+    "--directory",
+    help="Sets path to custom folder",
+    type=click.Path(exists=True, dir_okay=True),
+)
 @click.option(
     "--algorithm",
-    help="Sets MAFFT algorithm. Default --auto (automatic)",
-    default="--auto",
+    help="Sets MAFFT algorithm.",
+    default="auto",
+    show_default=True,
     type=click.STRING,
 )
 @click.option(
     "--pattern",
-    help="Sets custom pattern to find files for alignment. Default RAW.fas.",
+    help="Sets custom pattern to find files for alignment.",
     default="RAW.fas",
+    show_default=True,
     type=click.STRING,
 )
 def main(genomic, rna, protein, directory, algorithm, pattern):
@@ -97,7 +103,7 @@ def main(genomic, rna, protein, directory, algorithm, pattern):
         file_lst = get_files(directory + "/*", pattern)
         for infile in file_lst:
             # out = write_mafft_alignment_fasta_file(infile)
-            mafft_command = ["/usr/bin/mafft", algorithm, infile]
+            mafft_command = ["/usr/bin/mafft", "--" + algorithm, infile]
             output_file = re.search("(.*?)\.fas", infile)
             with open(output_file.group(1) + "_ali.fas", "w") as output:
                 subprocess.run(mafft_command, stdout=output, text=True)

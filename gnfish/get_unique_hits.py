@@ -115,12 +115,17 @@ def generate_output_file(path, pattern):
     flag_value="protein",
     type=click.STRING,
 )
-@click.option("--directory", help="Sets path to a custom folder", type=click.STRING)
+@click.option(
+    "--directory",
+    help="Sets path to a custom folder",
+    type=click.Path(exists=True, dir_okay=True),
+)
 @click.option(
     "--pattern",
-    help='Custom pattern to find Blast output files. Default ".tsv".',
+    help="Custom pattern to find Blast output files.",
     default=".tsv",
     type=click.STRING,
+    show_default=True,
 )
 def main(genomic, rna, protein, directory, pattern):
     """Get unique hits from BLAST output files based on genomes IDs."""

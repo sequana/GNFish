@@ -36,7 +36,11 @@ def decompress_genomes(directory):
 
 
 @click.command()
-@click.option("--directory", help="sets path to custom folder", type=click.STRING)
+@click.option(
+    "--directory",
+    help="sets path to custom folder",
+    type=click.Path(exists=True, dir_okay=True),
+)
 @click.option("--genomic", help="looks at ./Data/Genomic", is_flag=True)
 @click.option("--rna", help="looks at ./Data/Rna", is_flag=True)
 @click.option("--protein", help="looks at ./Data/Protein", is_flag=True)

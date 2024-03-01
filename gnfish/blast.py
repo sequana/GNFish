@@ -102,26 +102,29 @@ def blast(path, db_type, blast_path, query_type, query_file, out_exten, outfmt, 
 )
 @click.option(
     "--directory",
-    type=click.STRING,
+    type=click.Path(exists=True, dir_okay=True),
     help="sets path to custom folder (Genome files must have .fna (genomic and rna data) or .faa (protein data) extensions)",
 )
 @click.option(
     "--evalue",
     type=click.STRING,
-    help="E-value threshold for search. Default value equal to 1e-10",
+    help="E-value threshold for search.",
     default="1e-10",
+    show_default=True,
 )
 @click.option(
     "--outfmt",
     type=click.STRING,
-    help="Output alignment options. Default value 6",
+    help="Output alignment options.",
     default="6",
+    show_default=True,
 )
 @click.option(
     "--out_exten",
     type=click.STRING,
-    help='Extension of the BLAST output file. Default "_out.tsv".',
+    help="Extension of the BLAST output file.",
     default="_out.tsv",
+    show_default=True,
 )
 def main(
     blast_path,
