@@ -15,7 +15,7 @@ Suite of small Python programs following the pipeline detailed in (DOI of articl
 (3) production of a multiple sequence alignment<br />
 (4) selection of best-fit model of evolution<br />
 (5) solid reconstruction of a phylogenetic tree.<br />
-
+(6)
 There are 12 scripts:<br />
 
 **align_sequences.py** -> Align sequences using MAFFT software<br />
@@ -69,7 +69,7 @@ pip install biopython
 
 ### DESCRIPTION:<br />
 
-Program for dowloading genomes from NCBI Databases through Entrez. Requires internet conection.<br />
+Program for downloading genomes from NCBI Databases through Entrez. Requires internet conection.<br />
 It needs your e-mail and a file with your queries.<br />
 Queries are usallly taxa names (see query_genomes examples files at ./Example)<br />
 By default it will download genomic data, but you can also add protein or RNA, using --protein or --rna respectively.<br />
@@ -167,7 +167,7 @@ Just protein example. For rna, genomic, exclusive or retmax argument see 1 above
 
 ### DESCRIPTION:<br />
 
-Program for dowloading protein or nucleotide from NCBI Databases through Entrez. Requires internet conection.<br />
+Program for downloading protein or nucleotide from NCBI Databases through Entrez. Requires internet conection.<br />
 It needs your e-mail and a file with your queries.<br />
 Queries must follow "Gene name (filters). If no filters type () after the gene name.<br />
 By default it will download protein data, but you can change using --nucleotide parameter.<br />
@@ -225,7 +225,7 @@ Protein download, restricting maximum number to 50, curating, refine default jus
 ```
 ./Code/get_query_seqs.py hlorente@ucm.es Example/query_seqs_1.txt --retmax 50 --curated --refine
 ```
-Nucleotide **recommended** use. Dowloading restricting maximum number to 50 and just transcripts (refine argument).
+Nucleotide **recommended** use. Downloading restricting maximum number to 50 and just transcripts (refine argument).
 ```
 ./Code/get_query_seqs.py hlorente@ucm.es Example/query_seqs_1.txt --retmax 50 --curated --refine 'biomol_mrna[PROP]'
 ```
@@ -441,7 +441,7 @@ Custom directory. Output will be stored at custom directory (where the file is l
 ./Code/get_RAW_sequences.py --directory 'path_to_custom_directory'
 ```
 
-#### 2.- Adding seqs for future alingment. Recommended for Genomic sequences
+#### 2.- Adding seqs for future alignment. Recommended for Genomic sequences
 Genomic directory, sequences of 20,000 positions if possible. Output will be stored at ./Data/Genomic/Species_directory<br />
 20 sequences from the dataset of nucleotide_query_seqs.fas.
 ```

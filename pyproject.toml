@@ -1,0 +1,33 @@
+[tool.poetry]
+name = "gnfish"
+version = "0.1.0"
+description = ""
+authors = ["Your Name <you@example.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+biopython = "^1.83"
+click = "^8.1.7"
+loguru = "^0.7.2"
+pandas = "^2.2.1"
+
+[tool.poetry.group.test.dependencies]
+pytest = "^8.0.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+decompress_genomes = 'gnfish.decompress_genomes:main'
+get_genomes = 'gnfish.get_genomes:main'
+blast = 'gnfish.blast:main'
+get_unique_hits = 'gnfish.get_unique_hits:main'
+get_raw_sequences = 'gnfish.get_raw_sequences:main'
+translate_sequences = 'gnfish.translate_sequences:main'
+get_query_sequences = 'gnfish.get_query_sequences:main'
+get_combined_seqs = 'gnfish.get_combined_seqs:main'
+align_sequences = 'gnfish.align_sequences:main'
+alignment_trimming = 'gnfish.alignment_trimming:main'
+phylogenetic_inference = 'gnfish.phylogenetic_inference:main'
